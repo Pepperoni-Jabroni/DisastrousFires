@@ -3,6 +3,7 @@ package pepjebs.disastrousconditions.mixin;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -14,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import pepjebs.disastrousconditions.DisastrousConditionsMod;
 
 import java.util.Random;
+
+import static net.minecraft.state.property.Properties.AXIS;
 
 @Mixin(FireBlock.class)
 public class BurnedBlockEmplacementMixin {
@@ -30,25 +33,55 @@ public class BurnedBlockEmplacementMixin {
                                    CallbackInfo info, int idx, BlockState state) {
         boolean setBurned = false;
         if (Registry.BLOCK.getId(state.getBlock()).toString().contains("log")) {
-            world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_LOG_ID).getDefaultState());
+            BlockState toSet = Registry.BLOCK.get(DisastrousConditionsMod.BURNED_LOG_ID).getDefaultState();
+            if (state.getProperties().contains(AXIS)) {
+                toSet = toSet.with(AXIS, state.get(AXIS));
+            }
+            world.setBlockState(pos, toSet);
+            setBurned = true;
+        } else if (Registry.BLOCK.getId(state.getBlock()).toString().contains("planks")) {
+            world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_PLANKS_ID).getDefaultState());
             setBurned = true;
         } else if (Registry.BLOCK.getId(state.getBlock()).toString().contains("leaves") && rand.nextBoolean()) {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_LEAVES_ID).getDefaultState());
             setBurned = true;
-        } else if (state.getBlock() == Blocks.GRASS_BLOCK && rand.nextBoolean()) {
-            world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_GRASS_BLOCK_ID).getDefaultState());
+        } else if (state.getBlock() == Blocks.GRASS_BLOCK) {
+            if (rand.nextInt(0, 4) < 3) {
+                world.setBlockState(pos, Registry.BLOCK.get(
+                        DisastrousConditionsMod.BURNED_GRASS_BLOCK_ID).getDefaultState());
+            } else {
+                world.setBlockState(pos, Blocks.COARSE_DIRT.getDefaultState());
+            }
             setBurned = true;
         } else if (state.getBlock() == Blocks.GRASS && rand.nextBoolean()) {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_GRASS_ID).getDefaultState());
+            BlockPos below = pos.mutableCopy().add(0, -1, 0);
+            if (world.getBlockState(below).getBlock() == Blocks.GRASS_BLOCK) {
+                world.setBlockState(below, Registry.BLOCK.get(
+                        DisastrousConditionsMod.BURNED_GRASS_BLOCK_ID).getDefaultState());
+            } else {
+                world.setBlockState(below, Blocks.COARSE_DIRT.getDefaultState());
+            }
+            setBurned = true;
+        } else if (state.getBlock() instanceof PlantBlock && rand.nextBoolean()) {
+            world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_FLOWER_ID).getDefaultState());
+            BlockPos below = pos.mutableCopy().add(0, -1, 0);
+            if (world.getBlockState(below).getBlock() == Blocks.GRASS_BLOCK) {
+                world.setBlockState(below, Registry.BLOCK.get(
+                        DisastrousConditionsMod.BURNED_GRASS_BLOCK_ID).getDefaultState());
+            } else {
+                world.setBlockState(below, Blocks.COARSE_DIRT.getDefaultState());
+            }
             setBurned = true;
         }
         if (setBurned) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     for (int k = -1; k < 2; k++) {
-                        BlockPos query = pos.add(i, j, k);
+                        BlockPos query = pos.mutableCopy().add(i, j, k);
                         if (world.getBlockState(query).getBlock() == Blocks.AIR) {
                             world.setBlockState(query, Blocks.FIRE.getDefaultState());
+                            return;
                         }
                     }
                 }

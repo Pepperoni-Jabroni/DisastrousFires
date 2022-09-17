@@ -18,7 +18,9 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static final String MOD_ID = "disastrous_conditions";
 
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
+    public static Identifier BURNED_PLANKS_ID = new Identifier(MOD_ID, "burned_planks");
     public static Identifier BURNED_LEAVES_ID = new Identifier(MOD_ID, "burned_leaves");
+    public static Identifier BURNED_FLOWER_ID = new Identifier(MOD_ID, "burned_flower");
     public static Identifier BURNED_GRASS_ID = new Identifier(MOD_ID, "burned_grass");
     public static Identifier BURNED_GRASS_BLOCK_ID = new Identifier(MOD_ID, "burned_grass_block");
 
@@ -41,6 +43,19 @@ public class DisastrousConditionsMod implements ModInitializer {
                 new BlockItem(burnedLog, new Item.Settings().group(ItemGroup.MISC))
         );
 
+        Block burnedPlanks =
+                Registry.register(
+                        Registry.BLOCK,
+                        BURNED_PLANKS_ID,
+                        new Block(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                                .sounds(BlockSoundGroup.WOOD))
+                );
+        Registry.register(
+                Registry.ITEM,
+                BURNED_PLANKS_ID,
+                new BlockItem(burnedPlanks, new Item.Settings().group(ItemGroup.MISC))
+        );
+
         Block burnedLeaves =
                 Registry.register(
                         Registry.BLOCK,
@@ -52,6 +67,20 @@ public class DisastrousConditionsMod implements ModInitializer {
                 Registry.ITEM,
                 BURNED_LEAVES_ID,
                 new BlockItem(burnedLeaves, new Item.Settings().group(ItemGroup.MISC))
+        );
+
+        Block burnedFlower =
+                Registry.register(
+                        Registry.BLOCK,
+                        BURNED_FLOWER_ID,
+                        new Block(FabricBlockSettings.of(Material.PLANT).nonOpaque().collidable(false)
+                                .sounds(BlockSoundGroup.GRASS))
+                );
+        BlockRenderLayerMap.INSTANCE.putBlock(burnedFlower, RenderLayer.getTranslucent());
+        Registry.register(
+                Registry.ITEM,
+                BURNED_FLOWER_ID,
+                new BlockItem(burnedFlower, new Item.Settings().group(ItemGroup.MISC))
         );
 
         Block burnedGrass =
