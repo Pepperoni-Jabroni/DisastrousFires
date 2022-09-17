@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "disastrous_conditions",
+  "version": "${version}",
+
+  "name": "Disastrous Conditions",
+  "description": "Makes disasters in your world much more 'immserive'",
+  "authors": [
+    "Pepperoni__Jabroni__"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "",
+    "issues": ""
+  },
+
+  "license": "GPL-3.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": ["pepjebs.disastrousconditions.DisastrousConditionsMod"],
+    "modmenu": ["pepjebs.disastrousconditions.config.DisastrousConditionsModMenuApiImpl"]
+  },
+  "mixins": [
+    "disastrousconditions.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.18",
+    "java": ">=17"
+  }
+}
