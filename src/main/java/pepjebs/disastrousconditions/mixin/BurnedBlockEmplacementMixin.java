@@ -1,9 +1,6 @@
 package pepjebs.disastrousconditions.mixin;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FireBlock;
-import net.minecraft.block.PlantBlock;
+import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -31,6 +28,7 @@ public class BurnedBlockEmplacementMixin {
     )
     public void emplaceBurnedBlock(World world, BlockPos pos, int spreadFactor, Random rand, int currentAge,
                                    CallbackInfo info, int idx, BlockState state) {
+        // TODO: Make this programmatic
         boolean setBurned = false;
         if (Registry.BLOCK.getId(state.getBlock()).toString().contains("log")) {
             BlockState toSet = Registry.BLOCK.get(DisastrousConditionsMod.BURNED_LOG_ID).getDefaultState();
@@ -63,7 +61,7 @@ public class BurnedBlockEmplacementMixin {
                 world.setBlockState(below, Blocks.COARSE_DIRT.getDefaultState());
             }
             setBurned = true;
-        } else if (state.getBlock() instanceof PlantBlock && rand.nextBoolean()) {
+        } else if (state.getBlock() instanceof FlowerBlock && rand.nextBoolean()) {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_FLOWER_ID).getDefaultState());
             BlockPos below = pos.mutableCopy().add(0, -1, 0);
             if (world.getBlockState(below).getBlock() == Blocks.GRASS_BLOCK) {

@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Disastrous Conditions",
-  "description": "Makes disasters in your world much more 'immserive'",
+  "description": "Makes disasters in your world much more 'immersive'",
   "authors": [
     "Pepperoni__Jabroni__"
   ],
@@ -19,6 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": ["pepjebs.disastrousconditions.DisastrousConditionsMod"],
+    "client": ["pepjebs.disastrousconditions.client.DisastrousConditionsClientMod"],
     "modmenu": ["pepjebs.disastrousconditions.config.DisastrousConditionsModMenuApiImpl"]
   },
   "mixins": [

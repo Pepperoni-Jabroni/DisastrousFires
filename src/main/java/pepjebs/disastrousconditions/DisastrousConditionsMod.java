@@ -1,17 +1,18 @@
 package pepjebs.disastrousconditions;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 
 public class DisastrousConditionsMod implements ModInitializer {
 
@@ -30,83 +31,61 @@ public class DisastrousConditionsMod implements ModInitializer {
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
 
         // Register burned blocks
-        Block burnedLog =
-                Registry.register(
-                        Registry.BLOCK,
-                        BURNED_LOG_ID,
-                        new PillarBlock(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
-                                .sounds(BlockSoundGroup.WOOD))
-                );
-        Registry.register(
-                Registry.ITEM,
+        // TODO: Make this programmatic
+        registerBlock(
                 BURNED_LOG_ID,
-                new BlockItem(burnedLog, new Item.Settings().group(ItemGroup.MISC))
+                new PillarBlock(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                        .sounds(BlockSoundGroup.WOOD))
         );
 
-        Block burnedPlanks =
-                Registry.register(
-                        Registry.BLOCK,
-                        BURNED_PLANKS_ID,
-                        new Block(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
-                                .sounds(BlockSoundGroup.WOOD))
-                );
-        Registry.register(
-                Registry.ITEM,
+        registerBlock(
                 BURNED_PLANKS_ID,
-                new BlockItem(burnedPlanks, new Item.Settings().group(ItemGroup.MISC))
+                new Block(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                        .sounds(BlockSoundGroup.WOOD))
         );
 
-        Block burnedLeaves =
-                Registry.register(
-                        Registry.BLOCK,
-                        BURNED_LEAVES_ID,
-                        new Block(FabricBlockSettings.of(Material.LEAVES).nonOpaque().sounds(BlockSoundGroup.BAMBOO))
-                );
-        BlockRenderLayerMap.INSTANCE.putBlock(burnedLeaves, RenderLayer.getTranslucent());
-        Registry.register(
-                Registry.ITEM,
+        registerBlock(
                 BURNED_LEAVES_ID,
-                new BlockItem(burnedLeaves, new Item.Settings().group(ItemGroup.MISC))
+                new Block(FabricBlockSettings.of(Material.LEAVES).nonOpaque().sounds(BlockSoundGroup.BAMBOO))
         );
 
-        Block burnedFlower =
-                Registry.register(
-                        Registry.BLOCK,
-                        BURNED_FLOWER_ID,
-                        new Block(FabricBlockSettings.of(Material.PLANT).nonOpaque().collidable(false)
-                                .sounds(BlockSoundGroup.GRASS))
-                );
-        BlockRenderLayerMap.INSTANCE.putBlock(burnedFlower, RenderLayer.getTranslucent());
-        Registry.register(
-                Registry.ITEM,
+        registerBlock(
                 BURNED_FLOWER_ID,
-                new BlockItem(burnedFlower, new Item.Settings().group(ItemGroup.MISC))
+                new PlantBlock(FabricBlockSettings.of(Material.PLANT).noCollision().breakInstantly()
+                        .sounds(BlockSoundGroup.GRASS)) {
+                    @Override
+                    public VoxelShape getOutlineShape(
+                            BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+                        return Block.createCuboidShape(
+                                5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
+                    }
+                }
         );
 
-        Block burnedGrass =
-                Registry.register(
-                        Registry.BLOCK,
-                        BURNED_GRASS_ID,
-                        new PlantBlock(FabricBlockSettings.of(Material.PLANT).nonOpaque().collidable(false)
-                                .sounds(BlockSoundGroup.GRASS))
-                );
-        BlockRenderLayerMap.INSTANCE.putBlock(burnedGrass, RenderLayer.getTranslucent());
-        Registry.register(
-                Registry.ITEM,
+        registerBlock(
                 BURNED_GRASS_ID,
-                new BlockItem(burnedGrass, new Item.Settings().group(ItemGroup.MISC))
+                new PlantBlock(FabricBlockSettings.of(Material.PLANT).noCollision().breakInstantly()
+                        .sounds(BlockSoundGroup.GRASS)) {
+                    @Override
+                    public VoxelShape getOutlineShape(
+                            BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+                        return Block.createCuboidShape(
+                                2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
+                    }
+                }
         );
 
-        Block burnedGrassBlock =
-                Registry.register(
-                        Registry.BLOCK,
-                        BURNED_GRASS_BLOCK_ID,
-                        new Block(FabricBlockSettings.of(Material.PLANT).sounds(BlockSoundGroup.GRASS))
-                );
-        Registry.register(
-                Registry.ITEM,
+        registerBlock(
                 BURNED_GRASS_BLOCK_ID,
-                new BlockItem(burnedGrassBlock, new Item.Settings().group(ItemGroup.MISC))
+                new Block(FabricBlockSettings.of(Material.PLANT).sounds(BlockSoundGroup.GRASS))
         );
+    }
+
+    private static void registerBlock(
+            Identifier id,
+            Block block
+    ) {
+        Registry.register(Registry.BLOCK, id, block);
+        Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
     }
 }
