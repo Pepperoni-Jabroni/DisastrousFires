@@ -7,6 +7,7 @@ import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -14,11 +15,14 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 
+import java.util.Random;
+
 public class DisastrousConditionsMod implements ModInitializer {
 
     public static final String MOD_ID = "disastrous_conditions";
 
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
+    public static Identifier BURNED_STRIPPED_LOG_ID = new Identifier(MOD_ID, "burned_stripped_log");
     public static Identifier BURNED_PLANKS_ID = new Identifier(MOD_ID, "burned_planks");
     public static Identifier BURNED_LEAVES_ID = new Identifier(MOD_ID, "burned_leaves");
     public static Identifier BURNED_FLOWER_ID = new Identifier(MOD_ID, "burned_flower");
@@ -39,6 +43,12 @@ public class DisastrousConditionsMod implements ModInitializer {
         );
 
         registerBlock(
+                BURNED_STRIPPED_LOG_ID,
+                new PillarBlock(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                        .sounds(BlockSoundGroup.WOOD))
+        );
+
+        registerBlock(
                 BURNED_PLANKS_ID,
                 new Block(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.WOOD))
@@ -46,7 +56,15 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_LEAVES_ID,
-                new Block(FabricBlockSettings.of(Material.LEAVES).nonOpaque().sounds(BlockSoundGroup.BAMBOO))
+                new Block(FabricBlockSettings.of(Material.LEAVES).nonOpaque().ticksRandomly()
+                        .sounds(BlockSoundGroup.BAMBOO)) {
+                    @Override
+                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+                        if (random.nextInt(0, 30) == 0) {
+                            world.removeBlock(pos, false);
+                        }
+                    }
+                }
         );
 
         registerBlock(
@@ -77,7 +95,27 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_GRASS_BLOCK_ID,
-                new Block(FabricBlockSettings.of(Material.PLANT).sounds(BlockSoundGroup.GRASS))
+                new Block(FabricBlockSettings.of(Material.PLANT).ticksRandomly().sounds(BlockSoundGroup.GRASS)) {
+                    @Override
+                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+                        if (random.nextInt(0, 50) == 0) {
+                            BlockState toSet = random.nextBoolean() ? Blocks.DIRT.getDefaultState()
+                                    : Blocks.GRASS_BLOCK.getDefaultState();
+                            world.setBlockState(pos, toSet);
+                            if (random.nextInt(0, 8) == 0) {
+                                BlockPos above = pos.mutableCopy().add(0, 1, 0);
+                                int type = random.nextInt(0, 5);
+                                if (type < 2) {
+                                    world.setBlockState(above, Blocks.GRASS.getDefaultState());
+                                } else if (type < 4) {
+                                    world.setBlockState(above, Blocks.FERN.getDefaultState());
+                                } else {
+                                    world.setBlockState(above, Blocks.DANDELION.getDefaultState());
+                                }
+                            }
+                        }
+                    }
+                }
         );
     }
 
