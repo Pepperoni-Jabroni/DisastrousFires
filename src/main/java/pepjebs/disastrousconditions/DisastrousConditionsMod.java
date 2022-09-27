@@ -21,6 +21,8 @@ public class DisastrousConditionsMod implements ModInitializer {
 
     public static final String MOD_ID = "disastrous_conditions";
 
+    public static Identifier ASH_LAYER = new Identifier(MOD_ID, "ash");
+    public static Identifier ASH_BLOCK = new Identifier(MOD_ID, "ash_block");
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
     public static Identifier BURNED_STRIPPED_LOG_ID = new Identifier(MOD_ID, "burned_stripped_log");
     public static Identifier BURNED_PLANKS_ID = new Identifier(MOD_ID, "burned_planks");
@@ -36,6 +38,20 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         // Register burned blocks
         // TODO: Make this programmatic
+        registerBlock(
+                ASH_BLOCK,
+                new Block(FabricBlockSettings.of(Material.SOLID_ORGANIC).hardness(2.0f).requiresTool()
+                        .sounds(BlockSoundGroup.SAND))
+        );
+        registerBlock(
+                ASH_LAYER,
+                new SnowBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).hardness(2.0f).requiresTool()
+                        .sounds(BlockSoundGroup.SAND)){
+                    @Override
+                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {}
+                }
+        );
+
         registerBlock(
                 BURNED_LOG_ID,
                 new PillarBlock(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
@@ -60,7 +76,8 @@ public class DisastrousConditionsMod implements ModInitializer {
                         .sounds(BlockSoundGroup.BAMBOO)) {
                     @Override
                     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-                        if (random.nextInt(0, 30) == 0) {
+                        int decomposeBound = 30 + Math.abs(pos.getX() + pos.getZ() % 150);
+                        if (random.nextInt(0, decomposeBound) == 0) {
                             world.removeBlock(pos, false);
                         }
                     }
@@ -98,7 +115,8 @@ public class DisastrousConditionsMod implements ModInitializer {
                 new Block(FabricBlockSettings.of(Material.PLANT).ticksRandomly().sounds(BlockSoundGroup.GRASS)) {
                     @Override
                     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-                        if (random.nextInt(0, 50) == 0) {
+                        int decomposeBound = 100 + Math.abs(pos.getX() + pos.getZ() % 150);
+                        if (random.nextInt(0, decomposeBound) == 0) {
                             BlockState toSet = random.nextBoolean() ? Blocks.DIRT.getDefaultState()
                                     : Blocks.GRASS_BLOCK.getDefaultState();
                             world.setBlockState(pos, toSet);

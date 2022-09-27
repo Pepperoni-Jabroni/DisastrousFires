@@ -60,12 +60,23 @@ public class BurnedBlockEmplacementMixin {
             } else {
                 world.setBlockState(pos, Blocks.DIRT.getDefaultState());
             }
+            BlockPos above = pos.mutableCopy().add(0 ,1, 0);
+            BlockState aboveState = world.getBlockState(above);
+            if (aboveState.getBlock() == Blocks.GRASS) {
+                world.setBlockState(above,
+                        Registry.BLOCK.get(DisastrousConditionsMod.BURNED_GRASS_ID).getDefaultState());
+            } else if (aboveState.getBlock() instanceof FlowerBlock) {
+                world.setBlockState(above,
+                        Registry.BLOCK.get(DisastrousConditionsMod.BURNED_FLOWER_ID).getDefaultState());
+            } else if (aboveState.getBlock() == Blocks.AIR && rand.nextBoolean()) {
+                world.setBlockState(above, Registry.BLOCK.get(DisastrousConditionsMod.ASH_LAYER).getDefaultState());
+            }
             setBurned = true;
-        } else if (state.getBlock() == Blocks.GRASS && rand.nextBoolean()) {
+        } else if (state.getBlock() == Blocks.GRASS) {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_GRASS_ID).getDefaultState());
             emplaceBlockBelow(world, pos);
             setBurned = true;
-        } else if (state.getBlock() instanceof FlowerBlock && rand.nextBoolean()) {
+        } else if (state.getBlock() instanceof FlowerBlock) {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_FLOWER_ID).getDefaultState());
             emplaceBlockBelow(world, pos);
             setBurned = true;
