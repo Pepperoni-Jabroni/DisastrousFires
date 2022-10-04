@@ -4,16 +4,28 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.ClickType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -30,11 +42,26 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static Identifier BURNED_FLOWER_ID = new Identifier(MOD_ID, "burned_flower");
     public static Identifier BURNED_GRASS_ID = new Identifier(MOD_ID, "burned_grass");
     public static Identifier BURNED_GRASS_BLOCK_ID = new Identifier(MOD_ID, "burned_grass_block");
+    public static Identifier EXTINGUISHER_ID = new Identifier(MOD_ID, "extinguisher");
+    private static final Identifier EXTINGUISHER_RUNNING_SOUND_ID = new Identifier(MOD_ID, "extinguisher_running");
+    public static SoundEvent EXTINGUISHER_RUNNING_SOUND_EVENT = new SoundEvent(EXTINGUISHER_RUNNING_SOUND_ID);
 
     @Override
     public void onInitialize() {
         // Set Grass as flammable
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
+
+        // Register extinguisher
+        Registry.register(Registry.ITEM, EXTINGUISHER_ID, new Item(new Item.Settings().group(ItemGroup.MISC)) {
+            @Override
+            public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+                user.getWorld().playSound(null, user.getBlockPos(),
+                        EXTINGUISHER_RUNNING_SOUND_EVENT,
+                        SoundCategory.PLAYERS, 1.0F, 1.0F);
+                return super.use(world, user, hand);
+            }
+        });
+        Registry.register(Registry.SOUND_EVENT, EXTINGUISHER_RUNNING_SOUND_ID, EXTINGUISHER_RUNNING_SOUND_EVENT);
 
         // Register burned blocks
         // TODO: Make this programmatic
