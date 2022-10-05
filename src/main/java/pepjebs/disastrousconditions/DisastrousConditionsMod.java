@@ -69,12 +69,12 @@ public class DisastrousConditionsMod implements ModInitializer {
                         SoundCategory.PLAYERS, 1.0F, 1.0F);
                 Vec3d v = getDirection(user);
                 v = v.normalize();
-                for(int i = 0; i < 5; i++) {
+                for(int i = 0; i < 30; i++) {
                     Random r = new Random();
-                    Vec3d o = new Vec3d(.2*(r.nextFloat()-0.5), .2*(r.nextFloat()-0.5), .2*(r.nextFloat()-0.5));
+                    Vec3d o = new Vec3d(.75*(r.nextFloat()-0.5), .75*(r.nextFloat()-0.5), .75*(r.nextFloat()-0.5));
                     Vec3d p = v.add(o);
                     world.addParticle(EXTINGUISHER_FOAM_PARTICLE,
-                            user.getX(), user.getY() + 1.5, user.getZ(), p.getX(), p.getY(), p.getZ());
+                            user.getX() + 0.3, user.getY() + 1.2, user.getZ() + 0.3, p.getX(), p.getY(), p.getZ());
                 }
                 return super.use(world, user, hand);
             }

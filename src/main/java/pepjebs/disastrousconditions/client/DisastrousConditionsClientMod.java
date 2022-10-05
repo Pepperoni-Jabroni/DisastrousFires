@@ -4,9 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.minecraft.client.particle.ExplosionLargeParticle;
-import net.minecraft.client.particle.ExplosionSmokeParticle;
-import net.minecraft.client.particle.FlameParticle;
+import net.minecraft.client.particle.SpitParticle;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
@@ -21,7 +19,7 @@ public class DisastrousConditionsClientMod implements ClientModInitializer {
             registry.register(new Identifier(DisastrousConditionsMod.MOD_ID, "entity/extinguisher_foam"));
         }));
         ParticleFactoryRegistry.getInstance().register(
-                DisastrousConditionsMod.EXTINGUISHER_FOAM_PARTICLE, ExplosionSmokeParticle.Factory::new);
+                DisastrousConditionsMod.EXTINGUISHER_FOAM_PARTICLE, SpitParticle.Factory::new);
 
         // TODO: Make this programmatic
         BlockRenderLayerMap.INSTANCE.putBlock(
