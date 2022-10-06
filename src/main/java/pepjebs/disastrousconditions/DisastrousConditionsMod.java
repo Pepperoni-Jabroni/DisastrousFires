@@ -2,25 +2,23 @@ package pepjebs.disastrousconditions;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
@@ -30,7 +28,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import pepjebs.disastrousconditions.entity.ExtinguisherFoamEntity;
 
 import java.util.Random;
 
@@ -52,6 +50,15 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static SoundEvent EXTINGUISHER_RUNNING_SOUND_EVENT = new SoundEvent(EXTINGUISHER_RUNNING_SOUND_ID);
     public static final DefaultParticleType EXTINGUISHER_FOAM_PARTICLE = FabricParticleTypes.simple();
     public static final Identifier EXTINGUISHER_FOAM_PARTICLE_ID = new Identifier(MOD_ID, "extinguisher_foam");
+    public static final Identifier EXTINGUISHER_FOAM_ID = new Identifier(MOD_ID, "extinguisher_foam");
+    public static final Item EXTINGUISHER_FOAM_ITEM = Registry.register(
+            Registry.ITEM, EXTINGUISHER_FOAM_ID, new Item(new Item.Settings().group(ItemGroup.MISC)));
+    public static final EntityType<ExtinguisherFoamEntity> EXTINGUISHER_FOAM = Registry.register(
+            Registry.ENTITY_TYPE,
+            EXTINGUISHER_FOAM_ID,
+            FabricEntityTypeBuilder.<ExtinguisherFoamEntity>create(SpawnGroup.MISC, ExtinguisherFoamEntity::new)
+                    .fireImmune().build()
+    );
 
     @Override
     public void onInitialize() {
@@ -73,8 +80,10 @@ public class DisastrousConditionsMod implements ModInitializer {
                     Random r = new Random();
                     Vec3d o = new Vec3d(.75*(r.nextFloat()-0.5), .75*(r.nextFloat()-0.5), .75*(r.nextFloat()-0.5));
                     Vec3d p = v.add(o);
-                    world.addParticle(EXTINGUISHER_FOAM_PARTICLE,
-                            user.getX() + 0.3, user.getY() + 1.2, user.getZ() + 0.3, p.getX(), p.getY(), p.getZ());
+                    ExtinguisherFoamEntity e = new ExtinguisherFoamEntity(world, user);
+                    e.setPosition(user.getX() + 0.3, user.getY() + 1.2, user.getZ() + 0.3);
+                    e.setVelocity(p);
+                    world.spawnEntity(e);
                 }
                 return super.use(world, user, hand);
             }
