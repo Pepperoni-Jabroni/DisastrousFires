@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import pepjebs.disastrousconditions.DisastrousConditionsMod;
@@ -28,8 +29,15 @@ public class ExtinguisherFoamEntity extends ThrownItemEntity {
     }
 
     @Override
-    public boolean cannotBeSilenced() {
-        return super.cannotBeSilenced();
+    protected void onEntityHit(EntityHitResult entityHitResult) {
+        if (entityHitResult.getEntity().isOnFire()) {
+            entityHitResult.getEntity().setOnFire(false);
+            entityHitResult.getEntity().setFireTicks(0);
+            this.world.playSound(null, entityHitResult.getEntity().getBlockPos(),
+                    SoundEvents.BLOCK_FIRE_EXTINGUISH,
+                    SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
+        super.onEntityHit(entityHitResult);
     }
 
     @Override

@@ -74,15 +74,10 @@ public class DisastrousConditionsMod implements ModInitializer {
                 user.getWorld().playSound(null, user.getBlockPos(),
                         EXTINGUISHER_RUNNING_SOUND_EVENT,
                         SoundCategory.PLAYERS, 1.0F, 1.0F);
-                Vec3d v = getDirection(user);
-                v = v.normalize();
                 for(int i = 0; i < 30; i++) {
-                    Random r = new Random();
-                    Vec3d o = new Vec3d(.75*(r.nextFloat()-0.5), .75*(r.nextFloat()-0.5), .75*(r.nextFloat()-0.5));
-                    Vec3d p = v.add(o);
                     ExtinguisherFoamEntity e = new ExtinguisherFoamEntity(world, user);
-                    e.setPosition(user.getX() + 0.3, user.getY() + 1.2, user.getZ() + 0.3);
-                    e.setVelocity(p);
+                    e.setPosition(user.getX(), user.getEyeY() - 0.1, user.getZ());
+                    e.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 20.0F);
                     world.spawnEntity(e);
                 }
                 return super.use(world, user, hand);
@@ -196,19 +191,5 @@ public class DisastrousConditionsMod implements ModInitializer {
     ) {
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
-    }
-
-    // Thanks to Cloud#5723 on Fabric Discord!
-    private static Vec3d getDirection(Entity entity) {
-        double yaw = entity.getYaw();
-        double pitch = entity.getPitch();
-
-        double y = -Math.sin(Math.toRadians(pitch));
-
-        double xz = Math.cos(Math.toRadians(pitch));
-        double x = -xz * Math.sin(Math.toRadians(yaw));
-        double z = xz * Math.cos(Math.toRadians(yaw));
-
-        return new Vec3d(x,y,z);
     }
 }
