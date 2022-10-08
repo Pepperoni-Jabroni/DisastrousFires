@@ -109,7 +109,7 @@ public class BurnedBlockEmplacementMixin {
                 }
             }
             setBurned = true;
-        } else if (state.getBlock() == Blocks.GRASS_BLOCK) {
+        } else if (state.getBlock() == Blocks.GRASS_BLOCK || state.getBlock() == Blocks.DIRT_PATH) {
             if (rand.nextInt(0, 4) < 3) {
                 world.setBlockState(pos, Registry.BLOCK.get(
                         DisastrousConditionsMod.BURNED_GRASS_BLOCK_ID).getDefaultState());
