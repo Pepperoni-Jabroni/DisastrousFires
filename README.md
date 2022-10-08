@@ -5,5 +5,8 @@ Makes disasters in your world much more 'immserive'
 
 ![extinguisher_promo](https://user-images.githubusercontent.com/17690401/193734246-de01a54a-1f67-42d6-a2a1-fe2f044a5853.png)
 
+![fire_helmet](https://user-images.githubusercontent.com/17690401/194727743-7dc50e42-046e-482c-8a52-15194fc48732.png)
+
+
 Sound Credits
 - [Extinguisher use](https://freesound.org/people/Iamgiorgio/sounds/371839/)
