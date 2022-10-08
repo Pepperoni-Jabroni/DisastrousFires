@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dbd",
+    "did"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:water_bucket"
+    },
+    "i": {
+      "item": "minecraft:iron_block"
+    },
+    "d": {
+      "item": "minecraft:red_dye"
+    }
+  },
+  "result": {
+    "item": "disastrous_conditions:extinguisher"
+  }
+}

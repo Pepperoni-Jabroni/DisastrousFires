@@ -10,5 +10,5 @@
   "block.disastrous_conditions.burned_stripped_log": "Burned Stripped Log",
   "item.disastrous_conditions.extinguisher": "Fire Extinguisher",
   "item.disastrous_conditions.fire_helmet": "Fire Helmet",
-  "attribute.disastrous_conditions.fire_helmet.modifier": " 50% Reduction in Fire Tick Damage"
+  "attribute.disastrous_conditions.fire_helmet.modifier": " 75% Reduction in Fire Tick Damage"
 }

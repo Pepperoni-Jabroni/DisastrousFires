@@ -24,7 +24,7 @@ public class FireHelmetReductionMixin {
     )
     public boolean applyFireDamageReduction(Entity e, DamageSource ds, float f) {
         if (isEntityWearingFireHelmet(e)) {
-            return e.damage(ds, 0.5F * f);
+            return e.damage(ds, 0.25F * f);
         } else {
             return e.damage(ds, f);
         }
