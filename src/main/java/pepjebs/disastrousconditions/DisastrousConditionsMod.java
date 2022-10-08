@@ -69,6 +69,7 @@ public class DisastrousConditionsMod implements ModInitializer {
     public void onInitialize() {
         // Set Grass as flammable
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(Blocks.DIRT_PATH, 5, 20);
 
         // Register soot
         registerBlock(SOOT, new VineBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.VINE)

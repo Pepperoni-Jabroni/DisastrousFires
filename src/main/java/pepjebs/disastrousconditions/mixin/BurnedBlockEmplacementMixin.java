@@ -1,6 +1,7 @@
 package pepjebs.disastrousconditions.mixin;
 
 import net.minecraft.block.*;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -13,11 +14,49 @@ import pepjebs.disastrousconditions.DisastrousConditionsMod;
 
 import java.util.Random;
 
-import static net.minecraft.state.property.Properties.AXIS;
-import static net.minecraft.state.property.Properties.LAYERS;
+import static net.minecraft.state.property.Properties.*;
 
 @Mixin(FireBlock.class)
 public class BurnedBlockEmplacementMixin {
+
+    @Inject(
+            method = "scheduledTick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/world/ServerWorld;hasHighHumidity(Lnet/minecraft/util/math/BlockPos;)Z"
+            )
+    )
+    public void emplaceSootBlocks(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
+        for (int i = 0; i < 6; i++) {
+            pos = pos.up();
+            if (world.getBlockState(pos).getBlock() == Blocks.AIR) {
+                BlockState toSet = Registry.BLOCK.get(DisastrousConditionsMod.SOOT).getDefaultState();
+                if (world.getBlockState(pos.north()).isOpaque()) {
+                    toSet = toSet.with(NORTH, true);
+                }
+                if (world.getBlockState(pos.east()).isOpaque()) {
+                    toSet = toSet.with(EAST, true);
+                }
+                if (world.getBlockState(pos.south()).isOpaque()) {
+                    toSet = toSet.with(SOUTH, true);
+                }
+                if (world.getBlockState(pos.west()).isOpaque()) {
+                    toSet = toSet.with(WEST, true);
+                }
+                if (world.getBlockState(pos.up()).isOpaque()) {
+                    toSet = toSet.with(UP, true);
+                }
+                if (toSet.get(NORTH) || toSet.get(EAST) || toSet.get(SOUTH) || toSet.get(WEST) || toSet.get(UP)) {
+                    world.setBlockState(pos, toSet);
+                }
+                if (toSet.get(UP)) {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+    }
 
     @Inject(
             method = "trySpreadingFire",
