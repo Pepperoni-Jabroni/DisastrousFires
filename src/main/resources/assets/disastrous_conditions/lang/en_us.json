@@ -1,6 +1,6 @@
 {
   "block.disastrous_conditions.ash": "Ash",
-  "block.disastrous_conditions.ash_block": "Ash",
+  "block.disastrous_conditions.ash_block": "Ash Block",
   "block.disastrous_conditions.burned_flower": "Burned Flower",
   "block.disastrous_conditions.burned_grass": "Burned Grass",
   "block.disastrous_conditions.burned_grass_block": "Burned Grass Block",
@@ -8,5 +8,7 @@
   "block.disastrous_conditions.burned_log": "Burned Log",
   "block.disastrous_conditions.burned_planks": "Burned Planks",
   "block.disastrous_conditions.burned_stripped_log": "Burned Stripped Log",
-  "item.disastrous_conditions.extinguisher": "Extinguisher"
+  "item.disastrous_conditions.extinguisher": "Fire Extinguisher",
+  "item.disastrous_conditions.fire_helmet": "Fire Helmet",
+  "attribute.disastrous_conditions.fire_helmet.modifier": " 50% Reduction in Fire Tick Damage"
 }

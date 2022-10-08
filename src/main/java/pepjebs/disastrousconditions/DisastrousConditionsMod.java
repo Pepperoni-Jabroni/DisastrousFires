@@ -1,14 +1,13 @@
 package pepjebs.disastrousconditions;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.item.v1.EquipmentSlotProvider;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnGroup;
@@ -19,6 +18,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
@@ -27,8 +29,10 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import pepjebs.disastrousconditions.entity.ExtinguisherFoamEntity;
 
+import java.util.List;
 import java.util.Random;
 
 public class DisastrousConditionsMod implements ModInitializer {
@@ -67,7 +71,16 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         // Register fire helmet
         Registry.register(Registry.ITEM, FIRE_HELMET,
-                new Item(new FabricItemSettings().equipmentSlot(item -> EquipmentSlot.HEAD).group(ItemGroup.MISC)));
+                new Item(new FabricItemSettings().equipmentSlot(item -> EquipmentSlot.HEAD).group(ItemGroup.MISC)){
+                    @Override
+                    public void appendTooltip(
+                            ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+                        super.appendTooltip(stack, world, tooltip, context);
+                        tooltip.add(new TranslatableText("item.modifiers.head").formatted(Formatting.GRAY));
+                        tooltip.add(new TranslatableText("attribute.disastrous_conditions.fire_helmet.modifier")
+                                .formatted(Formatting.BLUE));
+                    }
+                });
 
         // Register extinguisher
         Registry.register(Registry.SOUND_EVENT, EXTINGUISHER_RUNNING_SOUND_ID, EXTINGUISHER_RUNNING_SOUND_EVENT);

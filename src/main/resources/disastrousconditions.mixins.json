@@ -4,7 +4,8 @@
   "package": "pepjebs.disastrousconditions.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BurnedBlockEmplacementMixin"
+    "BurnedBlockEmplacementMixin",
+    "FireHelmetReductionMixin"
   ],
   "client": [
   ],
