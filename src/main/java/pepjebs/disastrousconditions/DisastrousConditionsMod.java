@@ -1,6 +1,8 @@
 package pepjebs.disastrousconditions;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.item.v1.EquipmentSlotProvider;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -8,12 +10,10 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
@@ -35,6 +35,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
     public static final String MOD_ID = "disastrous_conditions";
 
+    public static Identifier FIRE_HELMET = new Identifier(MOD_ID, "fire_helmet");
     public static Identifier ASH_LAYER = new Identifier(MOD_ID, "ash");
     public static Identifier ASH_BLOCK = new Identifier(MOD_ID, "ash_block");
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
@@ -63,6 +64,10 @@ public class DisastrousConditionsMod implements ModInitializer {
     public void onInitialize() {
         // Set Grass as flammable
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
+
+        // Register fire helmet
+        Registry.register(Registry.ITEM, FIRE_HELMET,
+                new Item(new FabricItemSettings().equipmentSlot(item -> EquipmentSlot.HEAD).group(ItemGroup.MISC)));
 
         // Register extinguisher
         Registry.register(Registry.SOUND_EVENT, EXTINGUISHER_RUNNING_SOUND_ID, EXTINGUISHER_RUNNING_SOUND_EVENT);
