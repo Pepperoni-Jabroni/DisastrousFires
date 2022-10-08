@@ -40,6 +40,7 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static final String MOD_ID = "disastrous_conditions";
 
     public static Identifier FIRE_HELMET = new Identifier(MOD_ID, "fire_helmet");
+    public static Identifier SOOT = new Identifier(MOD_ID, "soot");
     public static Identifier ASH_LAYER = new Identifier(MOD_ID, "ash");
     public static Identifier ASH_BLOCK = new Identifier(MOD_ID, "ash_block");
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
@@ -68,6 +69,10 @@ public class DisastrousConditionsMod implements ModInitializer {
     public void onInitialize() {
         // Set Grass as flammable
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
+
+        // Register soot
+        registerBlock(SOOT, new VineBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.VINE)
+                .nonOpaque()));
 
         // Register fire helmet
         Registry.register(Registry.ITEM, FIRE_HELMET,

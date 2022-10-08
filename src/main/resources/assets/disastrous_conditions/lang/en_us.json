@@ -1,4 +1,5 @@
 {
+  "attribute.disastrous_conditions.fire_helmet.modifier": " 75% Reduction in Fire Tick Damage",
   "block.disastrous_conditions.ash": "Ash",
   "block.disastrous_conditions.ash_block": "Ash Block",
   "block.disastrous_conditions.burned_flower": "Burned Flower",
@@ -8,7 +9,7 @@
   "block.disastrous_conditions.burned_log": "Burned Log",
   "block.disastrous_conditions.burned_planks": "Burned Planks",
   "block.disastrous_conditions.burned_stripped_log": "Burned Stripped Log",
+  "block.disastrous_conditions.soot": "Soot",
   "item.disastrous_conditions.extinguisher": "Fire Extinguisher",
-  "item.disastrous_conditions.fire_helmet": "Fire Helmet",
-  "attribute.disastrous_conditions.fire_helmet.modifier": " 75% Reduction in Fire Tick Damage"
+  "item.disastrous_conditions.fire_helmet": "Fire Helmet"
 }
