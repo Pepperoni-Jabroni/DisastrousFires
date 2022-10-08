@@ -14,6 +14,7 @@ import pepjebs.disastrousconditions.DisastrousConditionsMod;
 import java.util.Random;
 
 import static net.minecraft.state.property.Properties.AXIS;
+import static net.minecraft.state.property.Properties.LAYERS;
 
 @Mixin(FireBlock.class)
 public class BurnedBlockEmplacementMixin {
@@ -52,6 +53,22 @@ public class BurnedBlockEmplacementMixin {
             setBurned = true;
         } else if (Registry.BLOCK.getId(state.getBlock()).toString().contains("leaves") && rand.nextBoolean()) {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_LEAVES_ID).getDefaultState());
+            BlockPos below = pos.add(0, -1, 0);
+            boolean didCast = false;
+            BlockState castBlock = world.getBlockState(below);
+            while (castBlock.getBlock() == Blocks.AIR) {
+                below = below.add(0, -1, 0);
+                didCast = true;
+                castBlock = world.getBlockState(below);
+            }
+            if (didCast) {
+                if (castBlock.getBlock() == Registry.BLOCK.get(DisastrousConditionsMod.ASH_LAYER)) {
+                    world.setBlockState(below, castBlock.with(LAYERS, castBlock.get(LAYERS) + 1));
+                } else if (castBlock.isOpaque()){
+                    world.setBlockState(below.add(0, 1, 0),
+                            Registry.BLOCK.get(DisastrousConditionsMod.ASH_LAYER).getDefaultState());
+                }
+            }
             setBurned = true;
         } else if (state.getBlock() == Blocks.GRASS_BLOCK) {
             if (rand.nextInt(0, 4) < 3) {
