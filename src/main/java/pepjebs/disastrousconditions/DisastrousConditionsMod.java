@@ -1,5 +1,7 @@
 package pepjebs.disastrousconditions;
 
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -18,6 +20,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -30,6 +33,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import pepjebs.disastrousconditions.config.DisastrousConditionsConfig;
 import pepjebs.disastrousconditions.entity.ExtinguisherFoamEntity;
 
 import java.util.List;
@@ -38,6 +42,8 @@ import java.util.Random;
 public class DisastrousConditionsMod implements ModInitializer {
 
     public static final String MOD_ID = "disastrous_conditions";
+    public static final DisastrousConditionsConfig CONFIG =
+            AutoConfig.register(DisastrousConditionsConfig.class, JanksonConfigSerializer::new).getConfig();
 
     public static Identifier FIRE_HELMET = new Identifier(MOD_ID, "fire_helmet");
     public static Identifier SOOT = new Identifier(MOD_ID, "soot");
@@ -88,8 +94,12 @@ public class DisastrousConditionsMod implements ModInitializer {
                             ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
                         super.appendTooltip(stack, world, tooltip, context);
                         tooltip.add(new TranslatableText("item.modifiers.head").formatted(Formatting.GRAY));
-                        tooltip.add(new TranslatableText("attribute.disastrous_conditions.fire_helmet.modifier")
-                                .formatted(Formatting.BLUE));
+                        tooltip.add(
+                                new LiteralText(DisastrousConditionsMod.CONFIG.fireTickDamageReductionPct + "% ")
+                                        .append(new TranslatableText(
+                                                "attribute.disastrous_conditions.fire_helmet.modifier"))
+                                        .formatted(Formatting.BLUE)
+                                );
                     }
                 });
 

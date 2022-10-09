@@ -9,22 +9,6 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class DisastrousConditionsConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip()
-    @Comment("Scale the mini-map to a given % of the height of your screen.")
-    public int forceMapScaling = 30;
-
-    @ConfigEntry.Gui.Tooltip()
-    @Comment("Enter an integer which will offset the mini-map horizontally")
-    public int mapHorizontalOffsetRightHand = 0;
-
-    @ConfigEntry.Gui.Tooltip()
-    @Comment("Enter an integer which will offset the mini-map vertically")
-    public int mapVerticalOffsetRightHand = 0;
-
-    @ConfigEntry.Gui.Tooltip()
-    @Comment("Enter an integer which will offset the mini-map horizontally")
-    public int mapHorizontalOffsetLeftHand = 0;
-
-    @ConfigEntry.Gui.Tooltip()
-    @Comment("Enter an integer which will offset the mini-map vertically")
-    public int mapVerticalOffsetLeftHand = 0;
+    @Comment("The % of fire damage to reduce from fire tick damage")
+    public int fireTickDamageReductionPct = 100;
 }
