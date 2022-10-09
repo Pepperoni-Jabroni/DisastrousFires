@@ -136,6 +136,10 @@ public class BurnedBlockEmplacementMixin {
             world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_FLOWER_ID).getDefaultState());
             emplaceBlockBelow(world, pos);
             setBurned = true;
+        } else if (state.getBlock() instanceof CropBlock) {
+            world.setBlockState(pos, Registry.BLOCK.get(DisastrousConditionsMod.BURNED_CROP_ID).getDefaultState());
+            emplaceBlockBelow(world, pos);
+            setBurned = true;
         }
         if (setBurned) {
             for (int i = -1; i < 2; i++) {

@@ -33,6 +33,10 @@ public class DisastrousConditionsClientMod implements ClientModInitializer {
 
         // TODO: Make this programmatic
         BlockRenderLayerMap.INSTANCE.putBlock(
+                Registry.BLOCK.get(DisastrousConditionsMod.BURNED_CROP_ID),
+                RenderLayer.getCutout()
+        );
+        BlockRenderLayerMap.INSTANCE.putBlock(
                 Registry.BLOCK.get(DisastrousConditionsMod.BURNED_GRASS_ID),
                 RenderLayer.getCutout()
         );

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "disastrous_conditions:block/burned_crop"
+  }
+}

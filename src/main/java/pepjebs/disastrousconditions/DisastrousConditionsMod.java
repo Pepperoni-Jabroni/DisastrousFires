@@ -43,6 +43,7 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static Identifier SOOT = new Identifier(MOD_ID, "soot");
     public static Identifier ASH_LAYER = new Identifier(MOD_ID, "ash");
     public static Identifier ASH_BLOCK = new Identifier(MOD_ID, "ash_block");
+    public static Identifier BURNED_CROP_ID = new Identifier(MOD_ID, "burned_crop");
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
     public static Identifier BURNED_STRIPPED_LOG_ID = new Identifier(MOD_ID, "burned_stripped_log");
     public static Identifier BURNED_PLANKS_ID = new Identifier(MOD_ID, "burned_planks");
@@ -70,10 +71,14 @@ public class DisastrousConditionsMod implements ModInitializer {
         // Set Grass as flammable
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.DIRT_PATH, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(Blocks.WHEAT, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(Blocks.POTATOES, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(Blocks.CARROTS, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(Blocks.BEETROOTS, 5, 20);
 
         // Register soot
         registerBlock(SOOT, new VineBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.VINE)
-                .nonOpaque()));
+                .nonOpaque().noCollision().breakInstantly()));
 
         // Register fire helmet
         Registry.register(Registry.ITEM, FIRE_HELMET,
@@ -109,6 +114,17 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         // Register burned blocks
         // TODO: Make this programmatic
+        Registry.register(Registry.BLOCK, BURNED_CROP_ID,
+                new Block(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.CROP)
+                        .nonOpaque().noCollision().breakInstantly()) {
+                    @Override
+                    public VoxelShape getOutlineShape(
+                            BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+                        return Block.createCuboidShape(
+                                0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
+                    }
+                });
+
         registerBlock(
                 ASH_BLOCK,
                 new Block(FabricBlockSettings.of(Material.SOLID_ORGANIC).hardness(2.0f).requiresTool()
