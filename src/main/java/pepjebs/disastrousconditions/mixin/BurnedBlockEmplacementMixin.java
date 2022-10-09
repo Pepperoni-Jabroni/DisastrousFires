@@ -1,7 +1,9 @@
 package pepjebs.disastrousconditions.mixin;
 
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -69,8 +71,13 @@ public class BurnedBlockEmplacementMixin {
     public void emplaceBurnedBlock(World world, BlockPos pos, int spreadFactor, Random rand, int currentAge,
                                    CallbackInfo info, int idx, BlockState state) {
         // TODO: Make this programmatic
+        if (FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()) == null) {
+            return;
+        }
         boolean setBurned = false;
-        if (Registry.BLOCK.getId(state.getBlock()).toString().contains("stripped_log")) {
+        if(Registry.BLOCK.getId(state.getBlock()).toString().contains("wool")) {
+            world.setBlockState(pos, Blocks.BLACK_WOOL.getDefaultState());
+        } if (Registry.BLOCK.getId(state.getBlock()).toString().contains("stripped_log")) {
             BlockState toSet = Registry.BLOCK.get(DisastrousConditionsMod.BURNED_STRIPPED_LOG_ID).getDefaultState();
             if (state.getProperties().contains(AXIS)) {
                 toSet = toSet.with(AXIS, state.get(AXIS));
@@ -84,6 +91,15 @@ public class BurnedBlockEmplacementMixin {
             }
             if (state.getProperties().contains(AXIS)) {
                 toSet = toSet.with(AXIS, state.get(AXIS));
+            }
+            world.setBlockState(pos, toSet);
+            setBurned = true;
+        } else if (Registry.BLOCK.getId(state.getBlock()).toString().contains("stairs")) {
+            BlockState toSet = Registry.BLOCK.get(DisastrousConditionsMod.BURNED_PLANK_STAIRS_ID).getDefaultState();
+            for(var b : new Property[]{HORIZONTAL_FACING, BLOCK_HALF, STAIR_SHAPE}) {
+                if (state.getProperties().contains(b)) {
+                    toSet = toSet.with(b, state.get(b));
+                }
             }
             world.setBlockState(pos, toSet);
             setBurned = true;

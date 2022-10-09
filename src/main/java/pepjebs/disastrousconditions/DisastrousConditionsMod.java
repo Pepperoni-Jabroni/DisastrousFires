@@ -53,6 +53,7 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
     public static Identifier BURNED_STRIPPED_LOG_ID = new Identifier(MOD_ID, "burned_stripped_log");
     public static Identifier BURNED_PLANKS_ID = new Identifier(MOD_ID, "burned_planks");
+    public static Identifier BURNED_PLANK_STAIRS_ID = new Identifier(MOD_ID, "burned_plank_stairs");
     public static Identifier BURNED_LEAVES_ID = new Identifier(MOD_ID, "burned_leaves");
     public static Identifier BURNED_FLOWER_ID = new Identifier(MOD_ID, "burned_flower");
     public static Identifier BURNED_GRASS_ID = new Identifier(MOD_ID, "burned_grass");
@@ -166,6 +167,12 @@ public class DisastrousConditionsMod implements ModInitializer {
                 new Block(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.WOOD))
         );
+        registerBlock(
+                BURNED_PLANK_STAIRS_ID,
+                new StairsBlock(
+                        Registry.BLOCK.get(BURNED_PLANKS_ID).getDefaultState(),
+                        FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                                .sounds(BlockSoundGroup.WOOD)));
 
         registerBlock(
                 BURNED_LEAVES_ID,
