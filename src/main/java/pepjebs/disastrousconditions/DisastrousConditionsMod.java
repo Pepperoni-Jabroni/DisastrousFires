@@ -16,19 +16,18 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -37,7 +36,6 @@ import pepjebs.disastrousconditions.config.DisastrousConditionsConfig;
 import pepjebs.disastrousconditions.entity.ExtinguisherFoamEntity;
 
 import java.util.List;
-import java.util.Random;
 
 public class DisastrousConditionsMod implements ModInitializer {
 
@@ -60,14 +58,14 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static Identifier BURNED_GRASS_BLOCK_ID = new Identifier(MOD_ID, "burned_grass_block");
     public static Identifier EXTINGUISHER_ID = new Identifier(MOD_ID, "extinguisher");
     private static final Identifier EXTINGUISHER_RUNNING_SOUND_ID = new Identifier(MOD_ID, "extinguisher_running");
-    public static SoundEvent EXTINGUISHER_RUNNING_SOUND_EVENT = new SoundEvent(EXTINGUISHER_RUNNING_SOUND_ID);
+    public static SoundEvent EXTINGUISHER_RUNNING_SOUND_EVENT = SoundEvent.of(EXTINGUISHER_RUNNING_SOUND_ID);
     public static final DefaultParticleType EXTINGUISHER_FOAM_PARTICLE = FabricParticleTypes.simple();
     public static final Identifier EXTINGUISHER_FOAM_PARTICLE_ID = new Identifier(MOD_ID, "extinguisher_foam");
     public static final Identifier EXTINGUISHER_FOAM_ID = new Identifier(MOD_ID, "extinguisher_foam");
     public static final Item EXTINGUISHER_FOAM_ITEM = Registry.register(
-            Registry.ITEM, EXTINGUISHER_FOAM_ID, new Item(new Item.Settings().group(ItemGroup.MISC)));
+            Registries.ITEM, EXTINGUISHER_FOAM_ID, new Item(new Item.Settings()));
     public static final EntityType<ExtinguisherFoamEntity> EXTINGUISHER_FOAM = Registry.register(
-            Registry.ENTITY_TYPE,
+            Registries.ENTITY_TYPE,
             EXTINGUISHER_FOAM_ID,
             FabricEntityTypeBuilder.<ExtinguisherFoamEntity>create(SpawnGroup.MISC, ExtinguisherFoamEntity::new)
                     .fireImmune().build()
@@ -88,16 +86,16 @@ public class DisastrousConditionsMod implements ModInitializer {
                 .nonOpaque().noCollision().breakInstantly()));
 
         // Register fire helmet
-        Registry.register(Registry.ITEM, FIRE_HELMET,
-                new Item(new FabricItemSettings().equipmentSlot(item -> EquipmentSlot.HEAD).group(ItemGroup.MISC)){
+        Registry.register(Registries.ITEM, FIRE_HELMET,
+                new Item(new FabricItemSettings().equipmentSlot(item -> EquipmentSlot.HEAD)){
                     @Override
                     public void appendTooltip(
                             ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
                         super.appendTooltip(stack, world, tooltip, context);
-                        tooltip.add(new TranslatableText("item.modifiers.head").formatted(Formatting.GRAY));
+                        tooltip.add(Text.translatable("item.modifiers.head").formatted(Formatting.GRAY));
                         tooltip.add(
-                                new LiteralText(DisastrousConditionsMod.CONFIG.fireTickDamageReductionPct + "% ")
-                                        .append(new TranslatableText(
+                                Text.literal(DisastrousConditionsMod.CONFIG.fireTickDamageReductionPct + "% ")
+                                        .append(Text.translatable(
                                                 "attribute.disastrous_conditions.fire_helmet.modifier"))
                                         .formatted(Formatting.BLUE)
                                 );
@@ -105,9 +103,9 @@ public class DisastrousConditionsMod implements ModInitializer {
                 });
 
         // Register extinguisher
-        Registry.register(Registry.SOUND_EVENT, EXTINGUISHER_RUNNING_SOUND_ID, EXTINGUISHER_RUNNING_SOUND_EVENT);
-        Registry.register(Registry.PARTICLE_TYPE, EXTINGUISHER_FOAM_PARTICLE_ID, EXTINGUISHER_FOAM_PARTICLE);
-        Registry.register(Registry.ITEM, EXTINGUISHER_ID, new Item(new Item.Settings().group(ItemGroup.MISC)) {
+        Registry.register(Registries.SOUND_EVENT, EXTINGUISHER_RUNNING_SOUND_ID, EXTINGUISHER_RUNNING_SOUND_EVENT);
+        Registry.register(Registries.PARTICLE_TYPE, EXTINGUISHER_FOAM_PARTICLE_ID, EXTINGUISHER_FOAM_PARTICLE);
+        Registry.register(Registries.ITEM, EXTINGUISHER_ID, new Item(new Item.Settings()) {
             @Override
             public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
                 user.getWorld().playSound(null, user.getBlockPos(),
@@ -125,7 +123,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         // Register burned blocks
         // TODO: Make this programmatic
-        Registry.register(Registry.BLOCK, BURNED_CROP_ID,
+        Registry.register(Registries.BLOCK, BURNED_CROP_ID,
                 new Block(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.CROP)
                         .nonOpaque().noCollision().breakInstantly()) {
                     @Override
@@ -146,7 +144,7 @@ public class DisastrousConditionsMod implements ModInitializer {
                 new SnowBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.SAND)){
                     @Override
-                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {}
+                    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {}
                 }
         );
 
@@ -170,7 +168,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 BURNED_PLANK_STAIRS_ID,
                 new StairsBlock(
-                        Registry.BLOCK.get(BURNED_PLANKS_ID).getDefaultState(),
+                        Registries.BLOCK.get(BURNED_PLANKS_ID).getDefaultState(),
                         FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
                                 .sounds(BlockSoundGroup.WOOD)));
 
@@ -179,9 +177,9 @@ public class DisastrousConditionsMod implements ModInitializer {
                 new Block(FabricBlockSettings.of(Material.LEAVES).nonOpaque().ticksRandomly()
                         .sounds(BlockSoundGroup.BAMBOO)) {
                     @Override
-                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+                    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
                         int decomposeBound = 30 + Math.abs(pos.getX() + pos.getZ() % 150);
-                        if (random.nextInt(0, decomposeBound) == 0) {
+                        if (random.nextInt(decomposeBound) == 0) {
                             world.removeBlock(pos, false);
                         }
                     }
@@ -218,15 +216,15 @@ public class DisastrousConditionsMod implements ModInitializer {
                 BURNED_GRASS_BLOCK_ID,
                 new Block(FabricBlockSettings.of(Material.PLANT).ticksRandomly().sounds(BlockSoundGroup.GRASS)) {
                     @Override
-                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+                    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
                         int decomposeBound = 100 + Math.abs(pos.getX() + pos.getZ() % 150);
-                        if (random.nextInt(0, decomposeBound) == 0) {
+                        if (random.nextInt(decomposeBound) == 0) {
                             BlockState toSet = random.nextBoolean() ? Blocks.DIRT.getDefaultState()
                                     : Blocks.GRASS_BLOCK.getDefaultState();
                             world.setBlockState(pos, toSet);
-                            if (random.nextInt(0, 8) == 0) {
+                            if (random.nextInt(8) == 0) {
                                 BlockPos above = pos.mutableCopy().add(0, 1, 0);
-                                int type = random.nextInt(0, 5);
+                                int type = random.nextInt(5);
                                 if (type < 2) {
                                     world.setBlockState(above, Blocks.GRASS.getDefaultState());
                                 } else if (type < 4) {
@@ -245,7 +243,7 @@ public class DisastrousConditionsMod implements ModInitializer {
             Identifier id,
             Block block
     ) {
-        Registry.register(Registry.BLOCK, id, block);
-        Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
+        Registry.register(Registries.BLOCK, id, block);
+        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()));
     }
 }

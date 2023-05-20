@@ -2,7 +2,7 @@ package pepjebs.disastrousconditions.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -34,6 +34,6 @@ public class FireHelmetReductionMixin {
     private boolean isEntityWearingFireHelmet(Entity e) {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(e.getArmorItems().iterator(),
                 Spliterator.ORDERED), false).anyMatch(i -> i.getItem() ==
-                Registry.ITEM.get(DisastrousConditionsMod.FIRE_HELMET));
+                Registries.ITEM.get(DisastrousConditionsMod.FIRE_HELMET));
     }
 }

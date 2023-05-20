@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "disastrous_conditions:entity/extinguisher_foam"
+    }
+  ]
+}
