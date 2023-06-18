@@ -33,7 +33,7 @@ public class ExtinguisherFoamEntity extends ThrownItemEntity {
         if (entityHitResult.getEntity().isOnFire()) {
             entityHitResult.getEntity().setOnFire(false);
             entityHitResult.getEntity().setFireTicks(0);
-            this.world.playSound(null, entityHitResult.getEntity().getBlockPos(),
+            this.getWorld().playSound(null, entityHitResult.getEntity().getBlockPos(),
                     SoundEvents.BLOCK_FIRE_EXTINGUISH,
                     SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
@@ -48,21 +48,21 @@ public class ExtinguisherFoamEntity extends ThrownItemEntity {
             for (int j = -1; j < 2; j++) {
                 for (int k = -1; k < 2; k++) {
                     BlockPos p = source.add(i, j, k);
-                    if (this.world.getBlockState(p).getBlock() == Blocks.FIRE) {
-                        this.world.setBlockState(p, Blocks.AIR.getDefaultState());
+                    if (this.getWorld().getBlockState(p).getBlock() == Blocks.FIRE) {
+                        this.getWorld().setBlockState(p, Blocks.AIR.getDefaultState());
                         playSound = true;
                     }
                 }
             }
         }
         if (playSound) {
-            this.world.playSound(null, source,
+            this.getWorld().playSound(null, source,
                     SoundEvents.BLOCK_FIRE_EXTINGUISH,
                     SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
-        if (this.world.getBlockState(source).isOpaque()) {
+        if (this.getWorld().getBlockState(source).isOpaque()) {
             this.kill();
-            this.world.addParticle(
+            this.getWorld().addParticle(
                 DisastrousConditionsMod.EXTINGUISHER_FOAM_PARTICLE,
                 source.getX() + 0.5f + blockHitResult.getSide().getOffsetX(),
                 source.getY() + 0.5f + blockHitResult.getSide().getOffsetY(),

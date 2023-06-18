@@ -82,7 +82,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.BEETROOTS, 5, 20);
 
         // Register soot
-        registerBlock(SOOT, new VineBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.VINE)
+        registerBlock(SOOT, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
                 .nonOpaque().noCollision().breakInstantly()));
 
         // Register fire helmet
@@ -124,7 +124,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         // Register burned blocks
         // TODO: Make this programmatic
         Registry.register(Registries.BLOCK, BURNED_CROP_ID,
-                new Block(FabricBlockSettings.of(Material.SOLID_ORGANIC).sounds(BlockSoundGroup.CROP)
+                new Block(FabricBlockSettings.create().sounds(BlockSoundGroup.CROP)
                         .nonOpaque().noCollision().breakInstantly()) {
                     @Override
                     public VoxelShape getOutlineShape(
@@ -136,12 +136,12 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 ASH_BLOCK,
-                new Block(FabricBlockSettings.of(Material.SOLID_ORGANIC).hardness(2.0f).requiresTool()
+                new Block(FabricBlockSettings.create().hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.SAND))
         );
         registerBlock(
                 ASH_LAYER,
-                new SnowBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC).hardness(2.0f).requiresTool()
+                new SnowBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.SAND)){
                     @Override
                     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {}
@@ -150,31 +150,31 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_LOG_ID,
-                new PillarBlock(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                new PillarBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.WOOD))
         );
 
         registerBlock(
                 BURNED_STRIPPED_LOG_ID,
-                new PillarBlock(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                new PillarBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.WOOD))
         );
 
         registerBlock(
                 BURNED_PLANKS_ID,
-                new Block(FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                new Block(FabricBlockSettings.create().hardness(2.0f).requiresTool()
                         .sounds(BlockSoundGroup.WOOD))
         );
         registerBlock(
                 BURNED_PLANK_STAIRS_ID,
                 new StairsBlock(
                         Registries.BLOCK.get(BURNED_PLANKS_ID).getDefaultState(),
-                        FabricBlockSettings.of(Material.WOOD).hardness(2.0f).requiresTool()
+                        FabricBlockSettings.create().hardness(2.0f).requiresTool()
                                 .sounds(BlockSoundGroup.WOOD)));
 
         registerBlock(
                 BURNED_LEAVES_ID,
-                new Block(FabricBlockSettings.of(Material.LEAVES).nonOpaque().ticksRandomly()
+                new Block(FabricBlockSettings.create().nonOpaque().ticksRandomly()
                         .sounds(BlockSoundGroup.BAMBOO)) {
                     @Override
                     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
@@ -188,7 +188,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_FLOWER_ID,
-                new PlantBlock(FabricBlockSettings.of(Material.PLANT).noCollision().breakInstantly()
+                new PlantBlock(FabricBlockSettings.create().noCollision().breakInstantly()
                         .sounds(BlockSoundGroup.GRASS)) {
                     @Override
                     public VoxelShape getOutlineShape(
@@ -201,7 +201,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_GRASS_ID,
-                new PlantBlock(FabricBlockSettings.of(Material.PLANT).noCollision().breakInstantly()
+                new PlantBlock(FabricBlockSettings.create().noCollision().breakInstantly()
                         .sounds(BlockSoundGroup.GRASS)) {
                     @Override
                     public VoxelShape getOutlineShape(
@@ -214,7 +214,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_GRASS_BLOCK_ID,
-                new Block(FabricBlockSettings.of(Material.PLANT).ticksRandomly().sounds(BlockSoundGroup.GRASS)) {
+                new Block(FabricBlockSettings.create().ticksRandomly().sounds(BlockSoundGroup.GRASS)) {
                     @Override
                     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
                         int decomposeBound = 100 + Math.abs(pos.getX() + pos.getZ() % 150);
