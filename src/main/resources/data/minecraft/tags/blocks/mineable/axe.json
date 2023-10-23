@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "disastrous_conditions:burned_log",
+    "disastrous_conditions:burned_stripped_log",
+    "disastrous_conditions:burned_planks"
+  ]
+}

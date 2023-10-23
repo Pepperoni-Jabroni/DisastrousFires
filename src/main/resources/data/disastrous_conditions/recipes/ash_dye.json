@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "disastrous_conditions:ash"
+    }
+  ],
+  "result": {
+    "item": "minecraft:light_gray_dye"
+  }
+}

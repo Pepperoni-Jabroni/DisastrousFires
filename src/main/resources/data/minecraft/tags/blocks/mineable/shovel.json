@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "disastrous_conditions:burned_dirt",
+    "disastrous_conditions:ash_block",
+    "disastrous_conditions:soot_block"
+  ]
+}

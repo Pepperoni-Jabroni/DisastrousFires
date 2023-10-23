@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "disastrous_conditions:soot"
+    }
+  ],
+  "result": {
+    "item": "minecraft:black_dye"
+  }
+}

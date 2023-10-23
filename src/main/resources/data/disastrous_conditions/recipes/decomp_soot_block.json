@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "disastrous_conditions:soot_block"
+    }
+  ],
+  "result": {
+    "item": "disastrous_conditions:soot",
+    "count": 4
+  }
+}

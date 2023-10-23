@@ -18,6 +18,7 @@ import net.minecraft.item.*;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -45,7 +46,10 @@ public class DisastrousConditionsMod implements ModInitializer {
 
     public static Identifier FIRE_HELMET = new Identifier(MOD_ID, "fire_helmet");
     public static Identifier SOOT = new Identifier(MOD_ID, "soot");
-    public static Identifier ASH_LAYER = new Identifier(MOD_ID, "ash");
+    public static Identifier SOOT_LAYER = new Identifier(MOD_ID, "soot_layer");
+    public static Identifier SOOT_BLOCK = new Identifier(MOD_ID, "soot_block");
+    public static Identifier ASH = new Identifier(MOD_ID, "ash");
+    public static Identifier ASH_LAYER = new Identifier(MOD_ID, "ash_layer");
     public static Identifier ASH_BLOCK = new Identifier(MOD_ID, "ash_block");
     public static Identifier BURNED_CROP_ID = new Identifier(MOD_ID, "burned_crop");
     public static Identifier BURNED_LOG_ID = new Identifier(MOD_ID, "burned_log");
@@ -82,8 +86,14 @@ public class DisastrousConditionsMod implements ModInitializer {
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.BEETROOTS, 5, 20);
 
         // Register soot
-        registerBlock(SOOT, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
-                .nonOpaque().noCollision().breakInstantly()));
+        Registry.register(Registries.ITEM, SOOT, new Item(new Item.Settings()));
+        registerBlock(SOOT_LAYER, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
+                .nonOpaque().noCollision().breakInstantly().requiresTool()));
+        registerBlock(
+                SOOT_BLOCK,
+                new Block(FabricBlockSettings.create().hardness(0.6F)
+                        .sounds(BlockSoundGroup.VINE).requiresTool())
+        );
 
         // Register fire helmet
         Registry.register(Registries.ITEM, FIRE_HELMET,
@@ -122,6 +132,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         });
 
         // Register burned blocks
+        Registry.register(Registries.ITEM, ASH, new Item(new Item.Settings()));
         // TODO: Make this programmatic
         Registry.register(Registries.BLOCK, BURNED_CROP_ID,
                 new Block(FabricBlockSettings.create().sounds(BlockSoundGroup.CROP)
@@ -136,48 +147,51 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 ASH_BLOCK,
-                new Block(FabricBlockSettings.create().hardness(2.0f).requiresTool()
-                        .sounds(BlockSoundGroup.SAND))
+                new Block(FabricBlockSettings.create().hardness(0.6F)
+                        .sounds(BlockSoundGroup.SAND).requiresTool())
         );
         registerBlock(
                 ASH_LAYER,
-                new SnowBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
-                        .sounds(BlockSoundGroup.SAND)){
-                    @Override
-                    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {}
-                }
+                new SnowBlock(FabricBlockSettings.create().hardness(0.1F)
+                        .sounds(BlockSoundGroup.SAND).requiresTool())
         );
 
         registerBlock(
                 BURNED_LOG_ID,
                 new PillarBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
-                        .sounds(BlockSoundGroup.WOOD))
+                        .sounds(BlockSoundGroup.WOOD).requiresTool())
         );
 
         registerBlock(
                 BURNED_STRIPPED_LOG_ID,
                 new PillarBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
-                        .sounds(BlockSoundGroup.WOOD))
+                        .sounds(BlockSoundGroup.WOOD).requiresTool())
         );
 
         registerBlock(
                 BURNED_PLANKS_ID,
-                new Block(FabricBlockSettings.create().hardness(2.0f).requiresTool()
+                new Block(FabricBlockSettings.create().hardness(2.0f)
                         .sounds(BlockSoundGroup.WOOD))
         );
         registerBlock(
                 BURNED_PLANK_STAIRS_ID,
                 new StairsBlock(
                         Registries.BLOCK.get(BURNED_PLANKS_ID).getDefaultState(),
-                        FabricBlockSettings.create().hardness(2.0f).requiresTool()
+                        FabricBlockSettings.create().hardness(2.0f)
                                 .sounds(BlockSoundGroup.WOOD)));
 
         registerBlock(
                 BURNED_LEAVES_ID,
                 new Block(FabricBlockSettings.create().nonOpaque().ticksRandomly()
                         .sounds(BlockSoundGroup.BAMBOO)) {
+
                     @Override
-                    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+                    public boolean hasRandomTicks(BlockState state) {
+                        return true;
+                    }
+
+                    @Override
+                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
                         int decomposeBound = 30 + Math.abs(pos.getX() + pos.getZ() % 150);
                         if (random.nextInt(decomposeBound) == 0) {
                             world.removeBlock(pos, false);
@@ -214,9 +228,16 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_GRASS_BLOCK_ID,
-                new Block(FabricBlockSettings.create().ticksRandomly().sounds(BlockSoundGroup.GRASS)) {
+                new Block(FabricBlockSettings.create().ticksRandomly().sounds(BlockSoundGroup.GRASS).hardness(0.6F)
+                        .requiresTool()) {
+
                     @Override
-                    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+                    public boolean hasRandomTicks(BlockState state) {
+                        return true;
+                    }
+
+                    @Override
+                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
                         int decomposeBound = 100 + Math.abs(pos.getX() + pos.getZ() % 150);
                         if (random.nextInt(decomposeBound) == 0) {
                             BlockState toSet = random.nextBoolean() ? Blocks.DIRT.getDefaultState()

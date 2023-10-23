@@ -8,9 +8,6 @@ import net.minecraft.client.particle.SpitParticle;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.util.Identifier;
 import pepjebs.disastrousconditions.DisastrousConditionsMod;
 
 public class DisastrousConditionsClientMod implements ClientModInitializer {
@@ -24,7 +21,7 @@ public class DisastrousConditionsClientMod implements ClientModInitializer {
 
         // Soot client prep
         BlockRenderLayerMap.INSTANCE.putBlock(
-                Registries.BLOCK.get(DisastrousConditionsMod.SOOT),
+                Registries.BLOCK.get(DisastrousConditionsMod.SOOT_LAYER),
                 RenderLayer.getCutout()
         );
 

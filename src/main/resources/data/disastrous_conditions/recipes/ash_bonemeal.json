@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "disastrous_conditions:ash"
+    },
+    {
+      "item": "disastrous_conditions:ash"
+    }
+  ],
+  "result": {
+    "item": "minecraft:bone_meal"
+  }
+}

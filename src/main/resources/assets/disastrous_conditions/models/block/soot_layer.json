@@ -1,8 +1,8 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "disastrous_conditions:block/soot",
-    "vine": "disastrous_conditions:block/soot"
+    "particle": "disastrous_conditions:block/soot_layer",
+    "vine": "disastrous_conditions:block/soot_layer"
   },
   "elements": [
     {   "from": [ 0, 0, 0.8 ],

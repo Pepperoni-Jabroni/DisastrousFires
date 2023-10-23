@@ -31,7 +31,7 @@ public class BurnedBlockEmplacementMixin {
         for (int i = 0; i < 6; i++) {
             pos = pos.up();
             if (world.getBlockState(pos).getBlock() == Blocks.AIR) {
-                BlockState toSet = Registries.BLOCK.get(DisastrousConditionsMod.SOOT).getDefaultState();
+                BlockState toSet = Registries.BLOCK.get(DisastrousConditionsMod.SOOT_LAYER).getDefaultState();
                 if (world.getBlockState(pos.north()).isOpaque()) {
                     toSet = toSet.with(NORTH, true);
                 }
