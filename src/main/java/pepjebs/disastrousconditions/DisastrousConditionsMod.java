@@ -88,11 +88,11 @@ public class DisastrousConditionsMod implements ModInitializer {
         // Register soot
         Registry.register(Registries.ITEM, SOOT, new Item(new Item.Settings()));
         registerBlock(SOOT_LAYER, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
-                .nonOpaque().noCollision().breakInstantly().requiresTool()));
+                .nonOpaque().noCollision().breakInstantly()));
         registerBlock(
                 SOOT_BLOCK,
                 new Block(FabricBlockSettings.create().hardness(0.6F)
-                        .sounds(BlockSoundGroup.VINE).requiresTool())
+                        .sounds(BlockSoundGroup.VINE))
         );
 
         // Register fire helmet
@@ -148,24 +148,24 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 ASH_BLOCK,
                 new Block(FabricBlockSettings.create().hardness(0.6F)
-                        .sounds(BlockSoundGroup.SAND).requiresTool())
+                        .sounds(BlockSoundGroup.SAND))
         );
         registerBlock(
                 ASH_LAYER,
                 new SnowBlock(FabricBlockSettings.create().hardness(0.1F)
-                        .sounds(BlockSoundGroup.SAND).requiresTool())
+                        .sounds(BlockSoundGroup.SAND))
         );
 
         registerBlock(
                 BURNED_LOG_ID,
                 new PillarBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
-                        .sounds(BlockSoundGroup.WOOD).requiresTool())
+                        .sounds(BlockSoundGroup.WOOD))
         );
 
         registerBlock(
                 BURNED_STRIPPED_LOG_ID,
                 new PillarBlock(FabricBlockSettings.create().hardness(2.0f).requiresTool()
-                        .sounds(BlockSoundGroup.WOOD).requiresTool())
+                        .sounds(BlockSoundGroup.WOOD))
         );
 
         registerBlock(
@@ -228,8 +228,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 BURNED_GRASS_BLOCK_ID,
-                new Block(FabricBlockSettings.create().ticksRandomly().sounds(BlockSoundGroup.GRASS).hardness(0.6F)
-                        .requiresTool()) {
+                new Block(FabricBlockSettings.create().ticksRandomly().sounds(BlockSoundGroup.GRASS).hardness(0.6F)) {
 
                     @Override
                     public boolean hasRandomTicks(BlockState state) {
