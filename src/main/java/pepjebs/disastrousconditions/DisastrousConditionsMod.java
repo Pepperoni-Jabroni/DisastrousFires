@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -88,7 +89,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         // Register soot
         Registry.register(Registries.ITEM, SOOT, new Item(new Item.Settings()));
         registerBlock(SOOT_LAYER, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
-                .nonOpaque().noCollision().breakInstantly()));
+                .nonOpaque().noCollision().breakInstantly().notSolid().pistonBehavior(PistonBehavior.DESTROY)));
         registerBlock(
                 SOOT_BLOCK,
                 new Block(FabricBlockSettings.create().hardness(0.6F)
@@ -153,7 +154,21 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 ASH_LAYER,
                 new SnowBlock(FabricBlockSettings.create().hardness(0.1F)
-                        .sounds(BlockSoundGroup.SAND))
+                        .sounds(BlockSoundGroup.SAND)) {
+
+                    @Override
+                    public boolean hasRandomTicks(BlockState state) {
+                        return true;
+                    }
+
+                    @Override
+                    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+                        int decomposeBound = 30 + Math.abs(pos.getX() + pos.getZ() % 150);
+                        if (random.nextInt(decomposeBound) == 0) {
+                            world.removeBlock(pos, false);
+                        }
+                    }
+                }
         );
 
         registerBlock(
@@ -242,8 +257,13 @@ public class DisastrousConditionsMod implements ModInitializer {
                             BlockState toSet = random.nextBoolean() ? Blocks.DIRT.getDefaultState()
                                     : Blocks.GRASS_BLOCK.getDefaultState();
                             world.setBlockState(pos, toSet);
+                            BlockPos above = pos.mutableCopy().add(0, 1, 0);
+                            var aboveId = Registries.BLOCK.getId(world.getBlockState(above).getBlock());
+                            if (aboveId == DisastrousConditionsMod.BURNED_GRASS_ID ||
+                                    aboveId == DisastrousConditionsMod.BURNED_FLOWER_ID) {
+                                world.setBlockState(above, Blocks.AIR.getDefaultState());
+                            }
                             if (random.nextInt(8) == 0) {
-                                BlockPos above = pos.mutableCopy().add(0, 1, 0);
                                 int type = random.nextInt(5);
                                 if (type < 2) {
                                     world.setBlockState(above, Blocks.GRASS.getDefaultState());

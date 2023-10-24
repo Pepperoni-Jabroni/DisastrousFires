@@ -3,6 +3,8 @@
   "values": [
     "disastrous_conditions:burned_grass_block",
     "disastrous_conditions:ash_block",
-    "disastrous_conditions:soot_block"
+    "disastrous_conditions:ash_layer",
+    "disastrous_conditions:soot_block",
+    "disastrous_conditions:soot_layer"
   ]
 }
