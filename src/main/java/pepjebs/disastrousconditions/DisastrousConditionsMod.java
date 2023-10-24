@@ -92,7 +92,7 @@ public class DisastrousConditionsMod implements ModInitializer {
                 .nonOpaque().noCollision().breakInstantly().notSolid().pistonBehavior(PistonBehavior.DESTROY)));
         registerBlock(
                 SOOT_BLOCK,
-                new Block(FabricBlockSettings.create().hardness(0.6F)
+                new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
                         .sounds(BlockSoundGroup.VINE))
         );
 
@@ -148,7 +148,7 @@ public class DisastrousConditionsMod implements ModInitializer {
 
         registerBlock(
                 ASH_BLOCK,
-                new Block(FabricBlockSettings.create().hardness(0.6F)
+                new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
                         .sounds(BlockSoundGroup.SAND))
         );
         registerBlock(
