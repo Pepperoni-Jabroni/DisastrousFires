@@ -3,6 +3,7 @@ package pepjebs.disastrousconditions.mixin;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
@@ -32,19 +33,19 @@ public class BurnedBlockEmplacementMixin {
             pos = pos.up();
             if (world.getBlockState(pos).getBlock() == Blocks.AIR) {
                 BlockState toSet = Registries.BLOCK.get(DisastrousConditionsMod.SOOT_LAYER).getDefaultState();
-                if (world.getBlockState(pos.north()).isOpaque()) {
+                if (world.getBlockState(pos.north()).isFullCube(world, pos.north())) {
                     toSet = toSet.with(NORTH, true);
                 }
-                if (world.getBlockState(pos.east()).isOpaque()) {
+                if (world.getBlockState(pos.east()).isFullCube(world, pos.east())) {
                     toSet = toSet.with(EAST, true);
                 }
-                if (world.getBlockState(pos.south()).isOpaque()) {
+                if (world.getBlockState(pos.south()).isFullCube(world, pos.south())) {
                     toSet = toSet.with(SOUTH, true);
                 }
-                if (world.getBlockState(pos.west()).isOpaque()) {
+                if (world.getBlockState(pos.west()).isFullCube(world, pos.west())) {
                     toSet = toSet.with(WEST, true);
                 }
-                if (world.getBlockState(pos.up()).isOpaque()) {
+                if (world.getBlockState(pos.up()).isFullCube(world, pos.up())) {
                     toSet = toSet.with(UP, true);
                 }
                 if (toSet.get(NORTH) || toSet.get(EAST) || toSet.get(SOUTH) || toSet.get(WEST) || toSet.get(UP)) {
@@ -73,7 +74,14 @@ public class BurnedBlockEmplacementMixin {
         if (FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()) == null) {
             return;
         }
-        boolean setBurned = false;
+        if (Random.createLocal().nextInt(10) < 3) {
+            if (state.streamTags().anyMatch(t -> t == BlockTags.DIRT)) {
+                world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+            } else {
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            }
+            return;
+        }
         if(Registries.BLOCK.getId(state.getBlock()).toString().contains("wool")) {
             world.setBlockState(pos, Blocks.BLACK_WOOL.getDefaultState());
         } if (Registries.BLOCK.getId(state.getBlock()).toString().contains("stripped_log")) {
@@ -82,7 +90,6 @@ public class BurnedBlockEmplacementMixin {
                 toSet = toSet.with(AXIS, state.get(AXIS));
             }
             world.setBlockState(pos, toSet);
-            setBurned = true;
         } else if (Registries.BLOCK.getId(state.getBlock()).toString().contains("log")) {
             BlockState toSet = Registries.BLOCK.get(DisastrousConditionsMod.BURNED_LOG_ID).getDefaultState();
             if (rand.nextInt(4) == 0) {
@@ -92,7 +99,6 @@ public class BurnedBlockEmplacementMixin {
                 toSet = toSet.with(AXIS, state.get(AXIS));
             }
             world.setBlockState(pos, toSet);
-            setBurned = true;
         } else if (Registries.BLOCK.getId(state.getBlock()).toString().contains("stairs")) {
             BlockState toSet = Registries.BLOCK.get(DisastrousConditionsMod.BURNED_PLANK_STAIRS_ID).getDefaultState();
             for(var b : new Property[]{HORIZONTAL_FACING, BLOCK_HALF, STAIR_SHAPE}) {
@@ -101,10 +107,8 @@ public class BurnedBlockEmplacementMixin {
                 }
             }
             world.setBlockState(pos, toSet);
-            setBurned = true;
         } else if (Registries.BLOCK.getId(state.getBlock()).toString().contains("planks")) {
             world.setBlockState(pos, Registries.BLOCK.get(DisastrousConditionsMod.BURNED_PLANKS_ID).getDefaultState());
-            setBurned = true;
         } else if (Registries.BLOCK.getId(state.getBlock()).toString().contains("leaves") && rand.nextBoolean()) {
             world.setBlockState(pos, Registries.BLOCK.get(DisastrousConditionsMod.BURNED_LEAVES_ID).getDefaultState());
             BlockPos below = pos.add(0, -1, 0);
@@ -123,7 +127,6 @@ public class BurnedBlockEmplacementMixin {
                             Registries.BLOCK.get(DisastrousConditionsMod.ASH_LAYER).getDefaultState());
                 }
             }
-            setBurned = true;
         } else if (state.getBlock() == Blocks.GRASS_BLOCK || state.getBlock() == Blocks.DIRT_PATH) {
             if (rand.nextInt(4) < 3) {
                 world.setBlockState(pos, Registries.BLOCK.get(
@@ -142,29 +145,23 @@ public class BurnedBlockEmplacementMixin {
             } else if (aboveState.getBlock() == Blocks.AIR && rand.nextBoolean()) {
                 world.setBlockState(above, Registries.BLOCK.get(DisastrousConditionsMod.ASH_LAYER).getDefaultState());
             }
-            setBurned = true;
         } else if (state.getBlock() == Blocks.GRASS) {
             world.setBlockState(pos, Registries.BLOCK.get(DisastrousConditionsMod.BURNED_GRASS_ID).getDefaultState());
             emplaceBlockBelow(world, pos);
-            setBurned = true;
         } else if (state.getBlock() instanceof FlowerBlock) {
             world.setBlockState(pos, Registries.BLOCK.get(DisastrousConditionsMod.BURNED_FLOWER_ID).getDefaultState());
             emplaceBlockBelow(world, pos);
-            setBurned = true;
         } else if (state.getBlock() instanceof CropBlock) {
             world.setBlockState(pos, Registries.BLOCK.get(DisastrousConditionsMod.BURNED_CROP_ID).getDefaultState());
             emplaceBlockBelow(world, pos);
-            setBurned = true;
         }
-        if (setBurned) {
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    for (int k = -1; k < 2; k++) {
-                        BlockPos query = pos.mutableCopy().add(i, j, k);
-                        if (world.getBlockState(query).getBlock() == Blocks.AIR) {
-                            world.setBlockState(query, Blocks.FIRE.getDefaultState());
-                            return;
-                        }
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                for (int k = -1; k < 2; k++) {
+                    BlockPos query = pos.mutableCopy().add(i, j, k);
+                    if (world.getBlockState(query).getBlock() == Blocks.AIR) {
+                        world.setBlockState(query, Blocks.FIRE.getDefaultState());
+                        return;
                     }
                 }
             }
