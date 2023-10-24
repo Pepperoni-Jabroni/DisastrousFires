@@ -90,11 +90,12 @@ public class DisastrousConditionsMod implements ModInitializer {
         Registry.register(Registries.ITEM, SOOT, new Item(new Item.Settings()));
         registerBlock(SOOT_LAYER, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
                 .nonOpaque().noCollision().breakInstantly().notSolid().pistonBehavior(PistonBehavior.DESTROY)));
-        registerBlock(
+        Block b = registerBlock(
                 SOOT_BLOCK,
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
                         .sounds(BlockSoundGroup.VINE))
         );
+        FlammableBlockRegistry.getDefaultInstance().add(b, 5, 20);
 
         // Register fire helmet
         Registry.register(Registries.ITEM, FIRE_HELMET,
@@ -137,7 +138,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         // TODO: Make this programmatic
         Registry.register(Registries.BLOCK, BURNED_CROP_ID,
                 new Block(FabricBlockSettings.create().sounds(BlockSoundGroup.CROP)
-                        .nonOpaque().noCollision().breakInstantly()) {
+                        .nonOpaque().noCollision().breakInstantly().replaceable()) {
                     @Override
                     public VoxelShape getOutlineShape(
                             BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -154,7 +155,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 ASH_LAYER,
                 new SnowBlock(FabricBlockSettings.create().hardness(0.1F)
-                        .sounds(BlockSoundGroup.SAND)) {
+                        .sounds(BlockSoundGroup.SAND).replaceable()) {
 
                     @Override
                     public boolean hasRandomTicks(BlockState state) {
@@ -218,7 +219,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 BURNED_FLOWER_ID,
                 new PlantBlock(FabricBlockSettings.create().noCollision().breakInstantly()
-                        .sounds(BlockSoundGroup.GRASS)) {
+                        .sounds(BlockSoundGroup.GRASS).replaceable()) {
                     @Override
                     public VoxelShape getOutlineShape(
                             BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -231,7 +232,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 BURNED_GRASS_ID,
                 new PlantBlock(FabricBlockSettings.create().noCollision().breakInstantly()
-                        .sounds(BlockSoundGroup.GRASS)) {
+                        .sounds(BlockSoundGroup.GRASS).replaceable()) {
                     @Override
                     public VoxelShape getOutlineShape(
                             BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -279,11 +280,12 @@ public class DisastrousConditionsMod implements ModInitializer {
         );
     }
 
-    private static void registerBlock(
+    private static Block registerBlock(
             Identifier id,
             Block block
     ) {
         Registry.register(Registries.BLOCK, id, block);
         Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()));
+        return block;
     }
 }
