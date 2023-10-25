@@ -23,6 +23,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -33,6 +34,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 import pepjebs.disastrousconditions.config.DisastrousConditionsConfig;
 import pepjebs.disastrousconditions.entity.ExtinguisherFoamEntity;
@@ -93,9 +95,17 @@ public class DisastrousConditionsMod implements ModInitializer {
         Block b = registerBlock(
                 SOOT_BLOCK,
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
-                        .sounds(BlockSoundGroup.VINE))
+                        .sounds(BlockSoundGroup.VINE)) {
+                    @Override
+                    public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+                        super.onDestroyedByExplosion(world, pos, explosion);
+                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        world.createExplosion(null, pos.getX(),
+                                pos.getY(), pos.getZ(), 2.0F, World.ExplosionSourceType.BLOCK);
+                    }
+                }
         );
-        FlammableBlockRegistry.getDefaultInstance().add(b, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(b, 60, 20);
 
         // Register fire helmet
         Registry.register(Registries.ITEM, FIRE_HELMET,
@@ -150,7 +160,27 @@ public class DisastrousConditionsMod implements ModInitializer {
         registerBlock(
                 ASH_BLOCK,
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
-                        .sounds(BlockSoundGroup.SAND))
+                        .sounds(BlockSoundGroup.SAND)) {
+
+                    @Override
+                    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+                        super.scheduledTick(state, world, pos, random);
+                        for (int i = -2; i < 3; i++) {
+                            for (int j = -2; j < 3; j++) {
+                                for (int k = -2; k < 3; k++) {
+                                    BlockPos query = pos.mutableCopy().add(i, j, k);
+                                    if (world.getBlockState(query).getBlock() == Blocks.FIRE) {
+                                        world.setBlockState(query, Blocks.AIR.getDefaultState());
+                                        world.playSound(null, query,
+                                                SoundEvents.BLOCK_FIRE_EXTINGUISH,
+                                                SoundCategory.BLOCKS, 1.0F, 1.0F);
+                                        world.syncWorldEvent(2009, query, 0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
         );
         registerBlock(
                 ASH_LAYER,

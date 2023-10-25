@@ -76,6 +76,7 @@ public class BurnedBlockEmplacementMixin {
         }
         var blockId = Registries.BLOCK.getId(state.getBlock());
         if (blockId == DisastrousConditionsMod.SOOT_BLOCK) {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
             world.createExplosion(
                     null, pos.getX(), pos.getY(), pos.getZ(), 2.0F, World.ExplosionSourceType.BLOCK);
             return;
