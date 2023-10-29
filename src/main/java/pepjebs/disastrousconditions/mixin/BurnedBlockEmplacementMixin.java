@@ -2,6 +2,7 @@ package pepjebs.disastrousconditions.mixin;
 
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.*;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
@@ -29,9 +30,11 @@ public class BurnedBlockEmplacementMixin {
             )
     )
     public void emplaceSootBlocks(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
+        if (random.nextInt(8) != 0) return;
         for (int i = 0; i < 6; i++) {
             pos = pos.up();
-            if (world.getBlockState(pos).getBlock() == Blocks.AIR) {
+            var block = world.getBlockState(pos).getBlock();
+            if (block == Blocks.AIR) {
                 BlockState toSet = Registries.BLOCK.get(DisastrousConditionsMod.SOOT_LAYER).getDefaultState();
                 if (world.getBlockState(pos.north()).isFullCube(world, pos.north())) {
                     toSet = toSet.with(NORTH, true);
@@ -51,10 +54,8 @@ public class BurnedBlockEmplacementMixin {
                 if (toSet.get(NORTH) || toSet.get(EAST) || toSet.get(SOUTH) || toSet.get(WEST) || toSet.get(UP)) {
                     world.setBlockState(pos, toSet);
                 }
-                if (toSet.get(UP)) {
-                    break;
-                }
-            } else {
+                break;
+            } else if (block != Registries.BLOCK.get(DisastrousConditionsMod.SOOT_LAYER)) {
                 break;
             }
         }
@@ -70,22 +71,24 @@ public class BurnedBlockEmplacementMixin {
     )
     public void emplaceBurnedBlock(World world, BlockPos pos, int spreadFactor, Random rand, int currentAge,
                                    CallbackInfo info, int idx, BlockState state) {
-        // TODO: Make this programmatic
-        if (FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()) == null) {
+        // TODO: Refactor this whole fn
+        if (FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()) == null || world.isClient) {
             return;
         }
         var blockId = Registries.BLOCK.getId(state.getBlock());
         if (blockId == DisastrousConditionsMod.SOOT_BLOCK) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.removeBlock(pos, false);
+            DisastrousConditionsMod.LOGGER.info("Calling createExplosion "+world.isClient());
             world.createExplosion(
-                    null, pos.getX(), pos.getY(), pos.getZ(), 2.0F, World.ExplosionSourceType.BLOCK);
+                    null, world.getDamageSources().create(DamageTypes.EXPLOSION), null,
+                    pos.toCenterPos(), 3.0F, false, World.ExplosionSourceType.BLOCK);
             return;
         }
-        if (Random.createLocal().nextInt(10) < 3) {
+        if (rand.nextInt(10) < 3) {
             if (state.streamTags().anyMatch(t -> t == BlockTags.DIRT)) {
                 world.setBlockState(pos, Blocks.DIRT.getDefaultState());
             } else {
-                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                world.removeBlock(pos, false);
             }
             return;
         }

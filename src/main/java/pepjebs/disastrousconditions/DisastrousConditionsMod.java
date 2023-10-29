@@ -35,6 +35,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import pepjebs.disastrousconditions.config.DisastrousConditionsConfig;
 import pepjebs.disastrousconditions.entity.ExtinguisherFoamEntity;
@@ -46,6 +48,7 @@ public class DisastrousConditionsMod implements ModInitializer {
     public static final String MOD_ID = "disastrous_conditions";
     public static final DisastrousConditionsConfig CONFIG =
             AutoConfig.register(DisastrousConditionsConfig.class, JanksonConfigSerializer::new).getConfig();
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public static Identifier FIRE_HELMET = new Identifier(MOD_ID, "fire_helmet");
     public static Identifier SOOT = new Identifier(MOD_ID, "soot");
