@@ -6,6 +6,7 @@
     "east": "disastrous_fires:block/burned_grass_side",
     "south": "disastrous_fires:block/burned_grass_side",
     "west": "disastrous_fires:block/burned_grass_side",
-    "down": "minecraft:block/dirt"
+    "down": "minecraft:block/dirt",
+    "particle": "disastrous_fires:block/burned_grass_side"
   }
 }
