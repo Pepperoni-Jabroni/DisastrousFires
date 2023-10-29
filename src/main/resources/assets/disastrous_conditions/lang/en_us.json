@@ -1,7 +1,8 @@
 {
   "attribute.disastrous_conditions.fire_helmet.modifier": "Reduction in Fire Tick Damage",
-  "block.disastrous_conditions.ash_layer": "Ash Layer",
+  "block.disastrous_conditions.ash_layer": "Ash",
   "block.disastrous_conditions.ash_block": "Ash Block",
+  "block.disastrous_conditions.burned_crop": "Burned Crop",
   "block.disastrous_conditions.burned_flower": "Burned Flower",
   "block.disastrous_conditions.burned_grass": "Burned Grass",
   "block.disastrous_conditions.burned_grass_block": "Burned Grass Block",
@@ -10,7 +11,7 @@
   "block.disastrous_conditions.burned_planks": "Burned Planks",
   "block.disastrous_conditions.burned_plank_stairs": "Burned Plank Stairs",
   "block.disastrous_conditions.burned_stripped_log": "Burned Stripped Log",
-  "block.disastrous_conditions.soot_layer": "Soot Layer",
+  "block.disastrous_conditions.soot_layer": "Soot",
   "block.disastrous_conditions.soot_block": "Soot Block",
   "item.disastrous_conditions.ash": "Ash",
   "item.disastrous_conditions.soot": "Soot",

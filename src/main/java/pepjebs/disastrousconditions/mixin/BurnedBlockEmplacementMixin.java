@@ -78,7 +78,6 @@ public class BurnedBlockEmplacementMixin {
         var blockId = Registries.BLOCK.getId(state.getBlock());
         if (blockId == DisastrousConditionsMod.SOOT_BLOCK) {
             world.removeBlock(pos, false);
-            DisastrousConditionsMod.LOGGER.info("Calling createExplosion "+world.isClient());
             world.createExplosion(
                     null, world.getDamageSources().create(DamageTypes.EXPLOSION), null,
                     pos.toCenterPos(), 3.0F, false, World.ExplosionSourceType.BLOCK);

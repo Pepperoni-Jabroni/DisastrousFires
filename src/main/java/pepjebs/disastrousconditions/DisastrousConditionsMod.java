@@ -4,6 +4,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -14,6 +15,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.particle.DefaultParticleType;
@@ -92,9 +94,10 @@ public class DisastrousConditionsMod implements ModInitializer {
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.BEETROOTS, 5, 20);
 
         // Register soot
-        Registry.register(Registries.ITEM, SOOT, new Item(new Item.Settings()));
-        registerBlock(SOOT_LAYER, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
-                .nonOpaque().noCollision().breakInstantly().notSolid().pistonBehavior(PistonBehavior.DESTROY)));
+        var sootItem = Registry.register(Registries.ITEM, SOOT, new Item(new Item.Settings()));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> {
+            content.add(sootItem);
+        });
         Block b = registerBlock(
                 SOOT_BLOCK,
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
@@ -102,16 +105,21 @@ public class DisastrousConditionsMod implements ModInitializer {
                     @Override
                     public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
                         super.onDestroyedByExplosion(world, pos, explosion);
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                        world.createExplosion(null, pos.getX(),
-                                pos.getY(), pos.getZ(), 2.0F, World.ExplosionSourceType.BLOCK);
+                        if (!world.isClient) {
+                            world.removeBlock(pos, false);
+                            world.createExplosion(
+                                    null, world.getDamageSources().create(DamageTypes.EXPLOSION), null,
+                                    pos.toCenterPos(), 3.0F, false, World.ExplosionSourceType.BLOCK);
+                        }
                     }
                 }
         );
+        registerBlock(SOOT_LAYER, new VineBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.VINE)
+                .nonOpaque().noCollision().breakInstantly().notSolid().pistonBehavior(PistonBehavior.DESTROY)));
         FlammableBlockRegistry.getDefaultInstance().add(b, 60, 20);
 
         // Register fire helmet
-        Registry.register(Registries.ITEM, FIRE_HELMET,
+        var helmet = Registry.register(Registries.ITEM, FIRE_HELMET,
                 new Item(new FabricItemSettings().equipmentSlot(item -> EquipmentSlot.HEAD)){
                     @Override
                     public void appendTooltip(
@@ -130,7 +138,7 @@ public class DisastrousConditionsMod implements ModInitializer {
         // Register extinguisher
         Registry.register(Registries.SOUND_EVENT, EXTINGUISHER_RUNNING_SOUND_ID, EXTINGUISHER_RUNNING_SOUND_EVENT);
         Registry.register(Registries.PARTICLE_TYPE, EXTINGUISHER_FOAM_PARTICLE_ID, EXTINGUISHER_FOAM_PARTICLE);
-        Registry.register(Registries.ITEM, EXTINGUISHER_ID, new Item(new Item.Settings()) {
+        var extinguisher = Registry.register(Registries.ITEM, EXTINGUISHER_ID, new Item(new Item.Settings()) {
             @Override
             public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
                 user.getWorld().playSound(null, user.getBlockPos(),
@@ -145,21 +153,17 @@ public class DisastrousConditionsMod implements ModInitializer {
                 return super.use(world, user, hand);
             }
         });
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(content -> {
+            content.add(helmet);
+            content.add(extinguisher);
+        });
 
         // Register burned blocks
-        Registry.register(Registries.ITEM, ASH, new Item(new Item.Settings()));
+        var ash = Registry.register(Registries.ITEM, ASH, new Item(new Item.Settings()));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> {
+            content.add(ash);
+        });
         // TODO: Make this programmatic
-        Registry.register(Registries.BLOCK, BURNED_CROP_ID,
-                new Block(FabricBlockSettings.create().sounds(BlockSoundGroup.CROP)
-                        .nonOpaque().noCollision().breakInstantly().replaceable()) {
-                    @Override
-                    public VoxelShape getOutlineShape(
-                            BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-                        return Block.createCuboidShape(
-                                0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-                    }
-                });
-
         registerBlock(
                 ASH_BLOCK,
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
@@ -204,6 +208,18 @@ public class DisastrousConditionsMod implements ModInitializer {
                     }
                 }
         );
+
+        registerBlock(
+                BURNED_CROP_ID,
+                new Block(FabricBlockSettings.create().sounds(BlockSoundGroup.CROP)
+                        .nonOpaque().noCollision().breakInstantly().replaceable()) {
+                    @Override
+                    public VoxelShape getOutlineShape(
+                            BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+                        return Block.createCuboidShape(
+                                0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
+                    }
+                });
 
         registerBlock(
                 BURNED_LOG_ID,
@@ -318,7 +334,10 @@ public class DisastrousConditionsMod implements ModInitializer {
             Block block
     ) {
         Registry.register(Registries.BLOCK, id, block);
-        Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()));
+        var item = Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(content -> {
+            content.add(item);
+        });
         return block;
     }
 }
