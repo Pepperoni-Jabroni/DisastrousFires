@@ -1,8 +1,8 @@
 {
   "extinguisher_running": {
-    "subtitle": "subtitles.disastrous_conditions.extinguisher_running",
+    "subtitle": "subtitles.disastrous_fires.extinguisher_running",
     "sounds": [
-      "disastrous_conditions:extinguisher_running"
+      "disastrous_fires:extinguisher_running"
     ]
   }
 }
