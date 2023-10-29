@@ -9,10 +9,12 @@ This mod revisits Fire in Minecraft in an attempt to make fires more destructive
 - Adding conditionally spawning new resource, "Ash", appearing as "Ash Layers" (like Snow Layers)
 - Ash can be used as dye, bonemeal, clay, and a new Ash Block, which extinguishes flames which touch it
 - Adding 2 new tools to fight fires with:
-- Extinguisher: Sprays foam to extinguish flames
-- Fire Helmet: Negates fire tick damage when worn
+   - Extinguisher: Sprays foam to extinguish flames
+   - Fire Helmet: Negates fire tick damage when worn
 - Burned Logs drop Charcoal when chopped with an axe
 - Burned blocks will degenerate and leave an area looking normal eventually
+
+NOTE: A single wildfire can encompass dozens of chunks and burn infinitely if not managed properly. Periodic back-ups are recommended. I am not responsible for burned structures or world damage.
 
 ![2022-09-17_12 08 44](https://user-images.githubusercontent.com/17690401/190873474-f4d1bf2d-eea9-4488-a859-e762a6e35786.png)
 
