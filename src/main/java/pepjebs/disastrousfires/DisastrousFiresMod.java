@@ -130,7 +130,7 @@ public class DisastrousFiresMod implements ModInitializer {
                         tooltip.add(
                                 Text.literal(DisastrousFiresMod.CONFIG.fireTickDamageReductionPct + "% ")
                                         .append(Text.translatable(
-                                                "attribute.disastrous_conditions.fire_helmet.modifier"))
+                                                "attribute.disastrous_fires.fire_helmet.modifier"))
                                         .formatted(Formatting.BLUE)
                                 );
                     }
