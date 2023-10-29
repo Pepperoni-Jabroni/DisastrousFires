@@ -88,6 +88,7 @@ public class DisastrousFiresMod implements ModInitializer {
         // Set Grass as flammable
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.GRASS_BLOCK, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.DIRT_PATH, 5, 20);
+        FlammableBlockRegistry.getDefaultInstance().add(Blocks.PODZOL, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.WHEAT, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.POTATOES, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(Blocks.CARROTS, 5, 20);
