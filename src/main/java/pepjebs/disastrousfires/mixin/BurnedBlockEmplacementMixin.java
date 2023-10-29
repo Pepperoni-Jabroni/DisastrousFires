@@ -136,7 +136,8 @@ public class BurnedBlockEmplacementMixin {
                             Registries.BLOCK.get(DisastrousFiresMod.ASH_LAYER).getDefaultState());
                 }
             }
-        } else if (state.getBlock() == Blocks.GRASS_BLOCK || state.getBlock() == Blocks.DIRT_PATH) {
+        } else if (state.getBlock() == Blocks.GRASS_BLOCK || state.getBlock() == Blocks.DIRT_PATH
+                || state.getBlock() == Blocks.PODZOL) {
             if (rand.nextInt(4) < 3) {
                 world.setBlockState(pos, Registries.BLOCK.get(
                         DisastrousFiresMod.BURNED_GRASS_BLOCK_ID).getDefaultState());
