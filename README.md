@@ -1,5 +1,5 @@
 # Disastrous Fires
-Makes fires in your world much more 'immserive'
+Makes fires in your world disastrous & resourceful
 
 This mod revisits Fire in Minecraft in an attempt to make fires more destructive *and* resourceful by doing the following:
 - Re-adding the ability for Grass Blocks to catch fire
