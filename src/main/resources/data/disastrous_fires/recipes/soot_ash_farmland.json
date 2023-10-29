@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:dirt"
+    },
+    {
+      "item": "disastrous_fires:ash"
+    },
+    {
+      "item": "disastrous_fires:soot"
+    }
+  ],
+  "result": {
+    "item": "minecraft:farmland"
+  }
+}

@@ -2,7 +2,7 @@
   "sources": [
     {
       "type": "single",
-      "resource": "disastrous_conditions:entity/extinguisher_foam"
+      "resource": "disastrous_fires:entity/extinguisher_foam"
     }
   ]
 }

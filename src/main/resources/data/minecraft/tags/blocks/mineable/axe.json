@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "disastrous_conditions:burned_log",
-    "disastrous_conditions:burned_stripped_log",
-    "disastrous_conditions:burned_planks"
+    "disastrous_fires:burned_log",
+    "disastrous_fires:burned_stripped_log",
+    "disastrous_fires:burned_planks"
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "attribute.disastrous_fires.fire_helmet.modifier": "Reduction in Fire Tick Damage",
+  "block.disastrous_fires.ash_layer": "Ash",
+  "block.disastrous_fires.ash_block": "Ash Block",
+  "block.disastrous_fires.burned_crop": "Burned Crop",
+  "block.disastrous_fires.burned_flower": "Burned Flower",
+  "block.disastrous_fires.burned_grass": "Burned Grass",
+  "block.disastrous_fires.burned_grass_block": "Burned Grass Block",
+  "block.disastrous_fires.burned_leaves": "Burned Leaves",
+  "block.disastrous_fires.burned_log": "Burned Log",
+  "block.disastrous_fires.burned_planks": "Burned Planks",
+  "block.disastrous_fires.burned_plank_stairs": "Burned Plank Stairs",
+  "block.disastrous_fires.burned_stripped_log": "Burned Stripped Log",
+  "block.disastrous_fires.soot_layer": "Soot",
+  "block.disastrous_fires.soot_block": "Soot Block",
+  "item.disastrous_fires.ash": "Ash",
+  "item.disastrous_fires.soot": "Soot",
+  "item.disastrous_fires.extinguisher": "Fire Extinguisher",
+  "item.disastrous_fires.fire_helmet": "Fire Helmet"
+}

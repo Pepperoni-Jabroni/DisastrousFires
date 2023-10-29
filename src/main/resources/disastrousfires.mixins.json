@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "pepjebs.disastrousfires.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BurnedBlockEmplacementMixin",
+    "FireHelmetReductionMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

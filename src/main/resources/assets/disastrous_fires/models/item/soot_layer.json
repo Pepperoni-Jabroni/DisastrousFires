@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "disastrous_fires:block/soot_layer"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "disastrous_fires:block/burned_planks",
+    "side": "disastrous_fires:block/burned_planks",
+    "top": "disastrous_fires:block/burned_planks"
+  }
+}

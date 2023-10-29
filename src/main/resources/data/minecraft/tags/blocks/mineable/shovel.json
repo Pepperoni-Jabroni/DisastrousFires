@@ -1,10 +1,10 @@
 {
   "replace": false,
   "values": [
-    "disastrous_conditions:burned_grass_block",
-    "disastrous_conditions:ash_block",
-    "disastrous_conditions:ash_layer",
-    "disastrous_conditions:soot_block",
-    "disastrous_conditions:soot_layer"
+    "disastrous_fires:burned_grass_block",
+    "disastrous_fires:ash_block",
+    "disastrous_fires:ash_layer",
+    "disastrous_fires:soot_block",
+    "disastrous_fires:soot_layer"
   ]
 }

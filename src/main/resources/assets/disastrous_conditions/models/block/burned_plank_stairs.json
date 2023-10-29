@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "disastrous_conditions:block/burned_planks",
-    "side": "disastrous_conditions:block/burned_planks",
-    "top": "disastrous_conditions:block/burned_planks"
-  }
-}

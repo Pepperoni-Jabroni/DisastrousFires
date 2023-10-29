@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "disastrous_fires:ash_block"
+    }
+  ],
+  "result": {
+    "item": "disastrous_fires:ash",
+    "count": 9
+  }
+}
