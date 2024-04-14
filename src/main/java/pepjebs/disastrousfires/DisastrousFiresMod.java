@@ -1,5 +1,6 @@
 package pepjebs.disastrousfires;
 
+import com.mojang.serialization.MapCodec;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -104,6 +105,11 @@ public class DisastrousFiresMod implements ModInitializer {
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
                         .sounds(BlockSoundGroup.VINE)) {
                     @Override
+                    protected MapCodec<? extends FallingBlock> getCodec() {
+                        return null;
+                    }
+
+                    @Override
                     public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
                         super.onDestroyedByExplosion(world, pos, explosion);
                         if (!world.isClient) {
@@ -169,6 +175,11 @@ public class DisastrousFiresMod implements ModInitializer {
                 ASH_BLOCK,
                 new FallingBlock(FabricBlockSettings.create().hardness(0.6F)
                         .sounds(BlockSoundGroup.SAND)) {
+
+                    @Override
+                    protected MapCodec<? extends FallingBlock> getCodec() {
+                        return null;
+                    }
 
                     @Override
                     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
@@ -271,6 +282,11 @@ public class DisastrousFiresMod implements ModInitializer {
                 new PlantBlock(FabricBlockSettings.create().noCollision().breakInstantly()
                         .sounds(BlockSoundGroup.GRASS).replaceable()) {
                     @Override
+                    protected MapCodec<? extends PlantBlock> getCodec() {
+                        return null;
+                    }
+
+                    @Override
                     public VoxelShape getOutlineShape(
                             BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
                         return Block.createCuboidShape(
@@ -283,6 +299,11 @@ public class DisastrousFiresMod implements ModInitializer {
                 BURNED_GRASS_ID,
                 new PlantBlock(FabricBlockSettings.create().noCollision().breakInstantly()
                         .sounds(BlockSoundGroup.GRASS).replaceable()) {
+                    @Override
+                    protected MapCodec<? extends PlantBlock> getCodec() {
+                        return null;
+                    }
+
                     @Override
                     public VoxelShape getOutlineShape(
                             BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -317,7 +338,7 @@ public class DisastrousFiresMod implements ModInitializer {
                             if (random.nextInt(8) == 0) {
                                 int type = random.nextInt(5);
                                 if (type < 2) {
-                                    world.setBlockState(above, Blocks.GRASS.getDefaultState());
+                                    world.setBlockState(above, Blocks.SHORT_GRASS.getDefaultState());
                                 } else if (type < 4) {
                                     world.setBlockState(above, Blocks.FERN.getDefaultState());
                                 } else {
